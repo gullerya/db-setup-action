@@ -8,7 +8,7 @@ module.exports = {
 async function pullDocker(dockerImage) {
 	return new Promise((resolve, reject) => {
 		console.info(`spawning: docker pull ${dockerImage}`);
-		const child = spawn('docker', ['pull', dockerImage], { stdio: 'pipe' });
+		const child = spawn('docker', ['pull', dockerImage], { stdio: [null, process.stdout, process.stderr] });
 
 		child.on('exit', code => {
 			if (code) {
@@ -23,7 +23,7 @@ async function pullDocker(dockerImage) {
 async function runDocker(params) {
 	return new Promise((resolve, reject) => {
 		console.info(`spawning: docker run -d ${params.join(' ')}`);
-		const child = spawn('docker', ['run', '-d', ...params], { stdio: 'pipe' });
+		const child = spawn('docker', ['run', '-d', ...params], { stdio: [null, process.stdout, process.stderr] });
 
 		child.on('exit', code => {
 			if (code) {
