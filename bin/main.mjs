@@ -1,6 +1,6 @@
-import PostgresqlSetup from './postgresql/postgres-setup.js';
-import SQLServerSetup from './sqlserver/sqlserver-setup.js';
-import { pullDocker } from './pull-docker.js';
+import PostgresqlSetup from './postgresql/postgres-setup.mjs';
+import SQLServerSetup from './sqlserver/sqlserver-setup.mjs';
+import { pullDocker } from './pull-docker.mjs';
 
 (function main() {
 	const SETUP = Object.freeze({
