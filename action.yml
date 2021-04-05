@@ -6,8 +6,8 @@ branding:
 description: 'RDBMS Setup automation'
 
 inputs:
-  type:
-    description: 'RDBMS type'
+  image:
+    description: 'RDBMS Docker image (choose from the lists in the documentation)'
     required: true
   port:
     description: 'Port to expose the DB on'

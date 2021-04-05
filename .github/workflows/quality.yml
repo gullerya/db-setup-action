@@ -12,7 +12,11 @@ jobs:
       - name: Setup MSSQL
         uses: ./
         with:
-          who-to-greet: 'Mona the Octocat'
+          image: 'mcr.microsoft.com/mssql/server:2019-latest'
+          port: 1433
+          username: sa
+          password: Pa$$w0rd
+          database: testdb
 
       - name: Test setup
         run: echo "TBD"
@@ -26,7 +30,11 @@ jobs:
       - name: Setup PostgreSQL
         uses: ./
         with:
-          who-to-greet: 'Mona the Octocat'
+          image: 'mcr.microsoft.com/mssql/server:2019-latest'
+          port: 5432
+          username: postgres
+          password: postgres
+          database: testdb
 
       - name: Test setup
         run: echo "TBD"
