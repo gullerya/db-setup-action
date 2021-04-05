@@ -24,4 +24,4 @@ inputs:
 
 runs:
   using: 'node12'
-  main: 'bin/main.js'
+  main: 'bin/main.mjs'
