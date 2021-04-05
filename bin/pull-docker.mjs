@@ -1,8 +1,8 @@
-import { spawnSync } from 'child_process';
+const { spawnSync } = require('child_process');
 
-export {
+module.exports = {
 	pullDocker
-}
+};
 
 function pullDocker(dockerImage) {
 

@@ -1,6 +1,6 @@
-export default {
+module.exports = {
 	resolveDockerImage
-}
+};
 
 function resolveDockerImage(inputDockerImage) {
 	return inputDockerImage;
