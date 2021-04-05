@@ -1,6 +1,6 @@
-const PostgresqlSetup = require('./postgresql/postgres-setup.mjs');
-const SQLServerSetup = require('./sqlserver/sqlserver-setup.mjs');
-const { pullDocker } = require('./pull-docker.mjs');
+const PostgresqlSetup = require('./postgresql/postgres-setup');
+const SQLServerSetup = require('./sqlserver/sqlserver-setup');
+const { pullDocker } = require('./pull-docker');
 
 (function main() {
 	const SETUP = Object.freeze({
