@@ -5,7 +5,25 @@ module.exports = {
 	runDocker
 };
 
+async function pruneDockerSystem() {
+	return new Promise((resolve, reject) => {
+		console.info('');
+		console.info(`spawning: docker system prune -a`);
+		console.info('');
+		const child = spawn('docker', ['system', 'prune', '-a'], { stdio: [null, process.stdout, process.stderr] });
+
+		child.on('exit', code => {
+			if (code) {
+				reject(code);
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+
 async function pullDocker(dockerImage) {
+	await pruneDockerSystem();
 	return new Promise((resolve, reject) => {
 		console.info('');
 		console.info(`spawning: docker pull ${dockerImage}`);
