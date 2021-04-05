@@ -2,7 +2,7 @@ const PostgresqlSetup = require('./postgresql/postgres-setup');
 const SQLServerSetup = require('./sqlserver/sqlserver-setup');
 const { pullDocker } = require('./pull-docker');
 
-(function main() {
+(async function main() {
 	const SETUP = Object.freeze({
 		image: process.env.INPUT_IMAGE,
 		port: process.env.INPUT_PORT,
@@ -22,7 +22,7 @@ const { pullDocker } = require('./pull-docker');
 		dockerImage = SQLServerSetup.resolveDockerImage(SETUP.image);
 	}
 
-	pullDocker(SETUP.image);
+	await pullDocker(SETUP.image);
 
 })();
 
