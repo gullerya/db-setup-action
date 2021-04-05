@@ -1,7 +1,9 @@
+const { pullDocker } = require('../pull-docker');
+
 module.exports = {
-	resolveDockerImage
+	setupSQLServer
 };
 
-function resolveDockerImage(inputDockerImage) {
-	return inputDockerImage;
+async function setupSQLServer(setup) {
+	await pullDocker(setup.image);
 }

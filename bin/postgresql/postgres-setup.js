@@ -1,7 +1,9 @@
+const { pullDocker } = require('../pull-docker');
+
 module.exports = {
-	resolveDockerImage
+	setupPostgres
 };
 
-function resolveDockerImage(inputDockerImage) {
-	return inputDockerImage;
+async function setupPostgres(setup) {
+	await pullDocker(setup.image);
 }

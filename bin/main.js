@@ -1,29 +1,39 @@
 const PostgresqlSetup = require('./postgresql/postgres-setup');
 const SQLServerSetup = require('./sqlserver/sqlserver-setup');
-const { pullDocker } = require('./pull-docker');
 
 (async function main() {
-	const SETUP = Object.freeze({
+	const CONFIG = Object.freeze({
 		image: process.env.INPUT_IMAGE,
 		port: process.env.INPUT_PORT,
 		username: process.env.INPUT_USERNAME,
 		password: process.env.INPUT_PASSWORD,
 		database: process.env.INPUT_DATABASE
 	});
-	console.log(SETUP);
 
-	const validationError = validateSetup(SETUP);
+	const validationError = validateSetup(CONFIG);
 	if (validationError) {
 		throw new Error(validationError);
 	}
 
-	let dockerImage = PostgresqlSetup.resolveDockerImage(SETUP.image);
-	if (!dockerImage) {
-		dockerImage = SQLServerSetup.resolveDockerImage(SETUP.image);
+	let setup;
+	if (CONFIG.image.toLowerCase().includes('postgres')) {
+		setup = PostgresqlSetup.setupPostgres;
+	} else if (CONFIG.image.toLowerCase().includes('mssql')) {
+		setup = SQLServerSetup.setupSQLServer;
 	}
 
-	await pullDocker(SETUP.image);
+	if (!setup) {
+		console.error(`unsupported image/DB '${CONFIG.image}', exiting`);
+		process.exit(1);
+	}
 
+	try {
+		await setup(CONFIG);
+	} catch (e) {
+		console.error(`setup failed:`);
+		console.error(e);
+		process.exit(1);
+	}
 })();
 
 function validateSetup(setup) {

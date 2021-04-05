@@ -30,7 +30,7 @@ jobs:
       - name: Setup PostgreSQL
         uses: ./
         with:
-          image: 'mcr.microsoft.com/mssql/server:2019-latest'
+          image: 'postgres:alpine'
           port: 5432
           username: postgres
           password: postgres
