@@ -1,4 +1,4 @@
-const { pullDocker } = require('../pull-docker');
+const { pullDocker, runDocker } = require('../utils');
 
 module.exports = {
 	setupSQLServer
@@ -6,4 +6,15 @@ module.exports = {
 
 async function setupSQLServer(setup) {
 	await pullDocker(setup.image);
+
+	await runDocker([
+		'-e ACCEPT_EULA=Y',
+		`-e SA_PASSWORD=${setup.password}`,
+		`-p ${setup.port}:1433`,
+		`${setup.image}`
+	]);
+
+	//	TODO: setup DB
+
+	//	TODO: health ckeck
 }
