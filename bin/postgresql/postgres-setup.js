@@ -11,7 +11,7 @@ async function setupPostgres(setup) {
 		`-e POSTGRES_USER=${setup.username}`,
 		`-e POSTGRES_PASSWORD=${setup.password}`,
 		`-e POSTGRES_DB=${setup.database}`,
-		`-p ${setup.port}:5432`,
+	//	`-p ${setup.port}:5432`,
 		`${setup.image}`
 	]);
 
