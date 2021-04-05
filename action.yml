@@ -1,10 +1,27 @@
 name: 'RDBMS Setup'
+author: 'Yuri Guller - gullerya@gmail.com'
+branding:
+  icon: 'database'  
+  color: 'blue'
 description: 'RDBMS Setup automation'
+
 inputs:
-  who-to-greet:
-    description: 'Who to greet'
+  type:
+    description: 'RDBMS type'
     required: true
-    default: 'World'
+  port:
+    description: 'Port to expose the DB on'
+    required: true
+  username:
+    description: 'Admin username to setup for your connection'
+    required: true
+  password:
+    description: 'Admin password to setup for your connection'
+    required: true
+  database:
+    description: 'Database to create for your usage'
+    required: true
+
 runs:
   using: 'node12'
   main: 'bin/main.js'
