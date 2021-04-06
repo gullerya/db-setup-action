@@ -1,4 +1,4 @@
-const { pullDocker, runDocker } = require('../utils');
+const { pullDocker, runDocker, dumpPorts } = require('../utils');
 
 module.exports = {
 	setupPostgres
@@ -18,7 +18,8 @@ async function setupPostgres(setup) {
 		setup.port + ':5432',
 		setup.image
 	]);
-	console.log(pid);
+	
+	await dumpPorts(pid);
 
 	//	TODO: health check
 }
