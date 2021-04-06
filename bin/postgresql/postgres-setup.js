@@ -1,4 +1,4 @@
-const { pullDocker, runDocker } = require('../utils');
+const { createDockerNetwork, pullDocker, runDocker } = require('../utils');
 
 module.exports = {
 	setupPostgres
