@@ -16,14 +16,14 @@ async function runDocker(params) {
 }
 
 async function dumpPorts(pid) {
-	return await _execDocker(['ports', pid]);
+	return await _execDocker(['port', pid]);
 }
 
 function _execDocker(params, captureOutput = false) {
 	return new Promise((resolve, reject) => {
-		console.info('');
-		console.info(`spawning: docker ${params.join(' ')}`);
-		console.info('');
+		console.info('|');
+		console.info(`| spawning: docker ${params.join(' ')}`);
+		console.info('|');
 		const child = spawn('docker', params, { stdio: [null, captureOutput ? null : process.stdout, process.stderr] });
 
 		let output = null;

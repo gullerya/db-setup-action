@@ -3,7 +3,7 @@ name: Quality pipeline
 on: [push]
 
 jobs:
-  verify-mssql:
+  verify-sqlserver-setup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,7 +21,7 @@ jobs:
       - name: Test setup
         run: echo "TBD"
 
-  verify-postgresql:
+  verify-postgresql-setup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
