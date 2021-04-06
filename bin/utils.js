@@ -10,7 +10,7 @@ async function pruneDockerSystem() {
 		console.info('');
 		console.info(`spawning: docker system prune -a`);
 		console.info('');
-		const child = spawn('docker', ['system', 'prune', '-a'], { stdio: [null, process.stdout, process.stderr] });
+		const child = spawn('docker', ['system', 'prune', '-af'], { stdio: [null, process.stdout, process.stderr] });
 
 		child.on('exit', code => {
 			if (code) {
