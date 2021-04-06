@@ -6,7 +6,7 @@ module.exports = {
 
 async function setupPostgres(setup) {
 	const networkName = 'rdbms-postgresql-network-01';
-	await createDockerNetwork(networkName);
+	//await createDockerNetwork(networkName);
 
 	await pullDocker(setup.image);
 
@@ -14,8 +14,8 @@ async function setupPostgres(setup) {
 	await runDocker([
 		'--name',
 		containerName,
-		'--network',
-		networkName,
+		// '--network',
+		// networkName,
 		`-e POSTGRES_USER=${setup.username}`,
 		`-e POSTGRES_PASSWORD=${setup.password}`,
 		`-e POSTGRES_DB=${setup.database}`,

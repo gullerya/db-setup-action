@@ -24,7 +24,6 @@ async function createDockerNetwork(networkName) {
 }
 
 async function pullDocker(dockerImage) {
-	// await pruneDockerSystem();
 	return new Promise((resolve, reject) => {
 		console.info('');
 		console.info(`spawning: docker pull ${dockerImage}`);
