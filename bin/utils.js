@@ -23,7 +23,7 @@ async function pruneDockerSystem() {
 }
 
 async function pullDocker(dockerImage) {
-	await pruneDockerSystem();
+	// await pruneDockerSystem();
 	return new Promise((resolve, reject) => {
 		console.info('');
 		console.info(`spawning: docker pull ${dockerImage}`);
