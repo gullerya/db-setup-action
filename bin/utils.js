@@ -29,9 +29,7 @@ function _execDocker(params, captureOutput = false) {
 		console.info('|');
 		const child = spawn('docker', params, { stdio: [null, captureOutput ? null : process.stdout, process.stderr] });
 
-		let output = null;
 		if (captureOutput) {
-			output = '';
 			child.stdout.on('data', outputCollector);
 		}
 
@@ -43,7 +41,7 @@ function _execDocker(params, captureOutput = false) {
 			if (code) {
 				reject(code);
 			} else {
-				resolve(output);
+				resolve(captureOutput ? output : undefined);
 			}
 		});
 	});
