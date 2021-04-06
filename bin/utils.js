@@ -20,7 +20,7 @@ async function dumpPorts(pid) {
 }
 
 function _execDocker(params, captureOutput = false) {
-	return new Promise(() => {
+	return new Promise((resolve, reject) => {
 		console.info('');
 		console.info(`spawning: docker ${params.join(' ')}`);
 		console.info('');
