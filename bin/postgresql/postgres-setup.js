@@ -12,13 +12,16 @@ async function setupPostgres(setup) {
 
 	const containerName = 'rdbms-postgresql-container-01';
 	await runDocker([
-		`--name ${containerName}`,
-		`--network ${networkName}`,
+		'--name',
+		containerName,
+		'--network',
+		networkName,
 		`-e POSTGRES_USER=${setup.username}`,
 		`-e POSTGRES_PASSWORD=${setup.password}`,
 		`-e POSTGRES_DB=${setup.database}`,
-		`-p ${setup.port}:5432`,
-		`${setup.image}`
+		'-p',
+		setup.port + ':5432',
+		setup.image
 	]);
 
 	//	TODO: health check
