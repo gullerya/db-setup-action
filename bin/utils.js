@@ -24,7 +24,7 @@ function _execDocker(params, captureOutput = false) {
 		console.info('');
 		console.info(`spawning: docker ${params.join(' ')}`);
 		console.info('');
-		const child = spawn('docker', params, { stdio: [null, process.stdout, process.stderr] });
+		const child = spawn('docker', params, { stdio: [null, captureOutput ? null : process.stdout, process.stderr] });
 
 		let output = null;
 		if (captureOutput) {
