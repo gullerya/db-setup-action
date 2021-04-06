@@ -20,6 +20,9 @@ async function dumpPorts(dockerName) {
 }
 
 function _execDocker(params, captureOutput = false) {
+	let output = '';
+	const outputCollector = buffer => output += buffer;
+
 	return new Promise((resolve, reject) => {
 		console.info('|');
 		console.info(`| spawning: docker ${params.join(' ')}`);
@@ -29,10 +32,14 @@ function _execDocker(params, captureOutput = false) {
 		let output = null;
 		if (captureOutput) {
 			output = '';
-			child.stdout.on('data', out => output += out);
+			child.stdout.on('data', outputCollector);
 		}
 
 		child.on('exit', code => {
+			if (captureOutput) {
+				child.stdio.off('data', outputCollector);
+				console.log(output);
+			}
 			if (code) {
 				reject(code);
 			} else {
