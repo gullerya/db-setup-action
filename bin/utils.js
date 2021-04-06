@@ -37,7 +37,7 @@ function _execDocker(params, captureOutput = false) {
 
 		child.on('exit', code => {
 			if (captureOutput) {
-				child.stdio.off('data', outputCollector);
+				child.stdout.off('data', outputCollector);
 				console.log(output);
 			}
 			if (code) {
