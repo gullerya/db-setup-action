@@ -1,57 +1,42 @@
 const { spawn } = require('child_process');
 
 module.exports = {
-	createDockerNetwork,
 	pullDocker,
-	runDocker
+	runDocker,
+	dumpPorts,
 };
 
-async function createDockerNetwork(networkName) {
-	return new Promise((resolve, reject) => {
-		console.info('');
-		console.info(`spawning: docker network create ${networkName}`);
-		console.info('');
-		const child = spawn('docker', ['network', 'create', networkName], { stdio: [null, process.stdout, process.stderr] });
-
-		child.on('exit', code => {
-			if (code) {
-				reject(code);
-			} else {
-				resolve();
-			}
-		});
-	});
-}
-
 async function pullDocker(dockerImage) {
-	return new Promise((resolve, reject) => {
-		console.info('');
-		console.info(`spawning: docker pull ${dockerImage}`);
-		console.info('');
-		const child = spawn('docker', ['pull', dockerImage], { stdio: [null, process.stdout, process.stderr] });
-
-		child.on('exit', code => {
-			if (code) {
-				reject(code);
-			} else {
-				resolve();
-			}
-		});
-	});
+	return await _execDocker(['pull', dockerImage]);
 }
 
 async function runDocker(params) {
-	return new Promise((resolve, reject) => {
+	const pid = await _execDocker(['run', '-d', '-rm', ...params], true);
+	return pid;
+}
+
+async function dumpPorts(pid) {
+	return await _execDocker(['ports', pid]);
+}
+
+function _execDocker(params, captureOutput = false) {
+	return new Promise(() => {
 		console.info('');
-		console.info(`spawning: docker run -d ${params.join(' ')}`);
+		console.info(`spawning: docker ${params.join(' ')}`);
 		console.info('');
-		const child = spawn('docker', ['run', '-d', ...params], { stdio: [null, process.stdout, process.stderr] });
+		const child = spawn('docker', params, { stdio: [null, process.stdout, process.stderr] });
+
+		let output = null;
+		if (captureOutput) {
+			output = '';
+			child.stdout.on('data', out => output += out);
+		}
 
 		child.on('exit', code => {
 			if (code) {
 				reject(code);
 			} else {
-				resolve();
+				resolve(output);
 			}
 		});
 	});

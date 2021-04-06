@@ -7,11 +7,14 @@ module.exports = {
 async function setupSQLServer(setup) {
 	await pullDocker(setup.image);
 
-	await runDocker([
-		'-e ACCEPT_EULA=Y',
-		`-e SA_PASSWORD=${setup.password}`,
-		`-p ${setup.port}:1433`,
-		`${setup.image}`
+	const pid = await runDocker([
+		'-e',
+		'ACCEPT_EULA=Y',
+		'-e',
+		'SA_PASSWORD=' + setup.password,
+		'-p',
+		setup.port + ':1433',
+		setup.image
 	]);
 
 	//	TODO: setup DB
