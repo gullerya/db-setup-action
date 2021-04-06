@@ -26,7 +26,7 @@ function _execDocker(params, captureOutput = false) {
 	return new Promise((resolve, reject) => {
 		console.info('='.repeat(32));
 		console.info(`spawning: docker ${params.join(' ')}`);
-		console.info('|'.repeat(32));
+		console.info('='.repeat(32));
 		const child = spawn('docker', params, { stdio: [null, captureOutput ? null : process.stdout, process.stderr] });
 
 		if (captureOutput) {
