@@ -11,7 +11,7 @@ async function pullDocker(dockerImage) {
 }
 
 async function runDocker(params) {
-	const pid = await _execDocker(['run', '-d', '-rm', ...params], true);
+	const pid = await _execDocker(['run', '-d', '--rm', ...params], true);
 	return pid;
 }
 
