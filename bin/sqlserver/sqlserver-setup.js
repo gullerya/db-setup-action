@@ -8,7 +8,7 @@ async function setupSQLServer(setup) {
 	await pullDocker(setup.image);
 
 	const dockerName = 'rdbms-setup-sqlserver-0';
-	const pid = await runDocker([
+	await runDocker([
 		'--name',
 		dockerName,
 		'-e',
@@ -19,7 +19,6 @@ async function setupSQLServer(setup) {
 		setup.port + ':1433',
 		setup.image
 	]);
-	console.log(pid);
 
 	await dumpPorts(dockerName);
 

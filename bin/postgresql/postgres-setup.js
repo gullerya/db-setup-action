@@ -8,7 +8,7 @@ async function setupPostgres(setup) {
 	await pullDocker(setup.image);
 
 	const dockerName = 'rdbms-setup-postgresql-0';
-	const pid = await runDocker([
+	await runDocker([
 		'--name',
 		dockerName,
 		'-e',
@@ -21,7 +21,6 @@ async function setupPostgres(setup) {
 		setup.port + ':5432',
 		setup.image
 	]);
-	console.log(pid);
 	
 	await dumpPorts(dockerName);
 
