@@ -1,16 +1,17 @@
 const { spawn } = require('child_process');
 
 module.exports = {
+	createDockerNetwork,
 	pullDocker,
 	runDocker
 };
 
-async function pruneDockerSystem() {
+async function createDockerNetwork(networkName) {
 	return new Promise((resolve, reject) => {
 		console.info('');
-		console.info(`spawning: docker system prune -a`);
+		console.info(`spawning: docker network create ${networkName}`);
 		console.info('');
-		const child = spawn('docker', ['system', 'prune', '-af'], { stdio: [null, process.stdout, process.stderr] });
+		const child = spawn('docker', ['network', 'create', networkName], { stdio: [null, process.stdout, process.stderr] });
 
 		child.on('exit', code => {
 			if (code) {
