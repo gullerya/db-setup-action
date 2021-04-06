@@ -42,7 +42,7 @@
 		"url": "https://github.com/gullerya/rdbms-setup-action"
 	},
 	"scripts": {
-		"lint": "eslint -c ./ci/.eslintrc.json ./bin/**/*.js ./ci/**/*.js"
+		"lint": "eslint -c ./ci/.eslintrc.json ./bin/*.js ./bin/**/*.js ./ci/**/*.js"
 	},
 	"devDependencies": {
 		"eslint": "^7.23.0"
