@@ -15,8 +15,8 @@ async function runDocker(params) {
 	return pid;
 }
 
-async function dumpPorts(pid) {
-	return await _execDocker(['port', pid]);
+async function dumpPorts(dockerName) {
+	return await _execDocker(['port', dockerName]);
 }
 
 function _execDocker(params, captureOutput = false) {

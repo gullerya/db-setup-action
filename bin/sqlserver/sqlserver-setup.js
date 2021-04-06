@@ -1,4 +1,4 @@
-const { pullDocker, runDocker } = require('../utils');
+const { pullDocker, runDocker, dumpPorts } = require('../utils');
 
 module.exports = {
 	setupSQLServer
@@ -7,7 +7,10 @@ module.exports = {
 async function setupSQLServer(setup) {
 	await pullDocker(setup.image);
 
+	const dockerName = 'rdbms-setup-sqlserver-0';
 	const pid = await runDocker([
+		'--name',
+		dockerName,
 		'-e',
 		'ACCEPT_EULA=Y',
 		'-e',
@@ -16,8 +19,9 @@ async function setupSQLServer(setup) {
 		setup.port + ':1433',
 		setup.image
 	]);
+	console.log(pid);
 
-	//	TODO: setup DB
+	await dumpPorts(dockerName);
 
 	//	TODO: health ckeck
 }
