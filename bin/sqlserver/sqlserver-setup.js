@@ -1,6 +1,7 @@
 const { pullDocker, runDocker, dumpPorts } = require('../utils');
 const ACCEPT_EULA_KEY = 'ACCEPT_EULA';
 const SA_PASSWORD_KEY = 'SA_PASSWORD';
+const SQLSERVER_NATIVE_PORT = '1433';
 
 module.exports = {
 	setupSQLServer
@@ -23,7 +24,7 @@ async function setupSQLServer(setup) {
 		'-e',
 		SA_PASSWORD_KEY + '=' + setup.password,
 		'-p',
-		setup.port + ':1433',
+		setup.port + ':' + SQLSERVER_NATIVE_PORT,
 		setup.image
 	]);
 

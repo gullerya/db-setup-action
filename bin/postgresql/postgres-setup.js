@@ -1,4 +1,8 @@
 const { pullDocker, runDocker, dumpPorts } = require('../utils');
+const POSTGRES_USER_KEY = 'POSTGRES_USER';
+const POSTGRES_PASSWORD_KEY = 'POSTGRES_PASSWORD';
+const POSTGRES_DB_KEY = 'POSTGRES_DB';
+const POSTGRES_NATIVE_PORT = '5432';
 
 module.exports = {
 	setupPostgres
@@ -12,16 +16,16 @@ async function setupPostgres(setup) {
 		'--name',
 		dockerName,
 		'-e',
-		'POSTGRES_USER=' + setup.username,
+		POSTGRES_USER_KEY + '=' + setup.username,
 		'-e',
-		'POSTGRES_PASSWORD=' + setup.password,
+		POSTGRES_PASSWORD_KEY + '=' + setup.password,
 		'-e',
-		'POSTGRES_DB=' + setup.database,
+		POSTGRES_DB_KEY + '=' + setup.database,
 		'-p',
-		setup.port + ':5432',
+		setup.port + ':' + POSTGRES_NATIVE_PORT,
 		setup.image
 	]);
-	
+
 	await dumpPorts(dockerName);
 
 	//	TODO: health check
