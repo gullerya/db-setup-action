@@ -63,6 +63,6 @@ Full Docker images list [find here](https://hub.docker.com/_/microsoft-mssql-ser
 ### Specific remarks
 
 In case of SQLServer please pay attention to the following:
-- you MUST set environment variable `ACCEPT_EULA=Y` to express your awareness of that
+- you MUST set environment variable `ACCEPT_EULA=Y` to express your awareness of it
 - the `username` MUST be `sa`
 - the `password` MUST meet strength requirements as per [this documentation (scroll to the `SA_PASSWORD` section)](https://hub.docker.com/_/microsoft-mssql-server)
