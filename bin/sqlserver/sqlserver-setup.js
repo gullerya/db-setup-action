@@ -9,7 +9,7 @@ module.exports = {
 
 async function setupSQLServer(setup) {
 	const ACCEPT_EULA = process.env[ACCEPT_EULA_KEY];
-	if (ACCEPT_EULA !== 'Y' || ACCEPT_EULA !== 'y') {
+	if (typeof ACCEPT_EULA !== 'string' || ACCEPT_EULA.toLowerCase() !== 'y') {
 		throw new Error(`for SQLServer, please set "${ACCEPT_EULA_KEY}=Y" environment variable, meaning you are aware of it`);
 	}
 
