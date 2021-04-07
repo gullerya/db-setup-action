@@ -24,7 +24,6 @@
 	},
 	"license": "ISC",
 	"main": "bin/main.js",
-	"type": "module",
 	"author": {
 		"name": "Yuri Guller",
 		"email": "gullerya@gmail.com"
