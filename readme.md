@@ -22,9 +22,7 @@ Main purpose of this action is to provide an easy and maximum possibly uniform s
 | `password` | sets up DB's admin password |
 | `database` | database name, that we'll create and your application will be using |
 
-> SQLServer: please __always__ set `username: sa` due to SQLServer NOT allows to alter admin user; `sa` will be used anyway, but it is better to be explicit.
-
-> SQLServer: the password MUST be of a certain complexity, see the remarks in SQLServer section below.
+> Attention: please review the per-DB sections below for any specifics or deviations of each.
 
 ## PostgreSQL
 
