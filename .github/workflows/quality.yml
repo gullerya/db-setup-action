@@ -3,6 +3,23 @@ name: Quality pipeline
 on: [push]
 
 jobs:
+  ensure-code-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install NodeJS 14
+        uses: actions/setup-node@2
+        with:
+          node-version: 14
+
+      - name: Install
+        run: npm Install
+
+      - name: Lint
+        run: npm run lint
+
   verify-sqlserver-setup:
     runs-on: ubuntu-latest
     steps:
