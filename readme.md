@@ -1,5 +1,7 @@
 # RDBMS Setup action
 
+[![Quality pipeline](https://github.com/gullerya/rdbms-setup-action/actions/workflows/quality.yml/badge.svg)](https://github.com/gullerya/rdbms-setup-action/actions/workflows/quality.yml)
+
 TBD
 
 ## Inputs
