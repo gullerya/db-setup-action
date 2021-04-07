@@ -49,13 +49,13 @@ Full Docker images list [find here](https://hub.docker.com/_/postgres?tab=tags&p
 name: Setup SQLServer
 uses: ./
 env:
-	ACCEPT_EULA: 'Y'
+  ACCEPT_EULA: 'Y'
 with:
-	image: 'mcr.microsoft.com/mssql/server:2019-latest'
-	port: 1433
-	username: sa
-	password: Pa$$w0rd
-	database: testdb
+  image: 'mcr.microsoft.com/mssql/server:2019-latest'
+  port: 1433
+  username: sa
+  password: Pa$$w0rd
+  database: testdb
 ```
 
 Full Docker images list [find here](https://hub.docker.com/_/microsoft-mssql-server).
