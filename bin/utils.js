@@ -16,7 +16,7 @@ async function runDocker(params) {
 }
 
 async function execDocker(params) {
-	return await _execDocker(['exec', '-d', ...params], true);
+	return await _execDocker(['exec', '-t', ...params], true);
 }
 
 async function dumpPorts(dockerName) {
