@@ -32,6 +32,7 @@ async function setupPostgres(setup) {
 }
 
 async function healthCheck(dockerName, setup) {
+	console.log('testing');
 	const result = await execDocker([
 		dockerName,
 		'psql',
