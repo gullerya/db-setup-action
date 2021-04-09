@@ -2,7 +2,7 @@
 
 [![Quality pipeline](https://github.com/gullerya/rdbms-setup-action/actions/workflows/quality.yml/badge.svg)](https://github.com/gullerya/rdbms-setup-action/actions/workflows/quality.yml)
 
-`rdbms-setup-action` automates install and run of the local RDBMS (Docker based, exposed to host).
+`rdbms-setup-action` automates install and run of the local RDBMS (Docker based).
 
 Currently supported:
 - PostgreSQL
