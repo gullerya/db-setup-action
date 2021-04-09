@@ -48,7 +48,7 @@ async function healthCheck(dockerName, setup) {
 			})
 			.catch(e => {
 				console.log(e);
-				reject();
+				reject(e);
 			});
 	});
 }
