@@ -26,22 +26,29 @@ async function setupPostgres(setup) {
 		setup.image
 	]);
 
-	await healthCheck(dockerName, setup);
-
 	await dumpPorts(dockerName);
+
+	await healthCheck(dockerName, setup);
 }
 
 async function healthCheck(dockerName, setup) {
-	console.log('testing');
-	const result = await execDocker([
-		dockerName,
-		'psql',
-		'-U',
-		setup.username,
-		'-c',
-		`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'`,
-		'-t'
-	]);
-
-	console.log(result);
+	return new Promise((resolve, reject) => {
+		execDocker([
+			dockerName,
+			'psql',
+			'-U',
+			setup.username,
+			'-c',
+			`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'`,
+			'-t'
+		])
+			.then(r => {
+				console.log(r);
+				resolve();
+			})
+			.catch(e => {
+				console.log(e);
+				reject();
+			});
+	});
 }
