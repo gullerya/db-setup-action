@@ -3,6 +3,7 @@ const { spawn } = require('child_process');
 module.exports = {
 	pullDocker,
 	runDocker,
+	execDocker,
 	dumpPorts,
 };
 
@@ -11,8 +12,11 @@ async function pullDocker(dockerImage) {
 }
 
 async function runDocker(params) {
-	const pid = await _execDocker(['run', '-d', '--rm', ...params], true);
-	return pid;
+	return await _execDocker(['run', '-d', '--rm', ...params], true);
+}
+
+async function execDocker(params) {
+	return await _execDocker(['exec', '-d', ...params], true);
 }
 
 async function dumpPorts(dockerName) {

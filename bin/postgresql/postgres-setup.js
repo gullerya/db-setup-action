@@ -1,4 +1,4 @@
-const { pullDocker, runDocker, dumpPorts } = require('../utils');
+const { pullDocker, runDocker, execDocker, dumpPorts } = require('../utils');
 const POSTGRES_USER_KEY = 'POSTGRES_USER';
 const POSTGRES_PASSWORD_KEY = 'POSTGRES_PASSWORD';
 const POSTGRES_DB_KEY = 'POSTGRES_DB';
@@ -28,5 +28,19 @@ async function setupPostgres(setup) {
 
 	await dumpPorts(dockerName);
 
-	//	TODO: health check
+	await healthCheck(dockerName, setup);
+}
+
+async function healthCheck(dockerName, setup) {
+	const result = await execDocker([
+		dockerName,
+		'psql',
+		'-U',
+		setup.username,
+		'-c',
+		`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'`,
+		'-t'
+	]);
+
+	console.log(result);
 }
