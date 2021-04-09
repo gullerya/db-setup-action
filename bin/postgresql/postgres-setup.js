@@ -26,9 +26,9 @@ async function setupPostgres(setup) {
 		setup.image
 	]);
 
-	await dumpPorts(dockerName);
-
 	await healthCheck(dockerName, setup);
+
+	await dumpPorts(dockerName);
 }
 
 async function healthCheck(dockerName, setup) {
