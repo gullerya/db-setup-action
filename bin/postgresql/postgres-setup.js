@@ -63,8 +63,8 @@ async function healthCheck(cname, setup) {
 				`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'`,
 				'-t'
 			]);
-			console.info('db satatus: ' + status);
-			return status === '1'
+			process.stdout.write('db satatus: ' + status);
+			return status.trim() === '1'
 		},
 		4000,
 		1000
