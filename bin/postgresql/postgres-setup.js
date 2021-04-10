@@ -41,6 +41,7 @@ async function healthCheck(cname, setup) {
 	const isRunning = await retryUntil(
 		async () => {
 			const status = await dockerInspect(cname, ['-f', '{{.State.Status}}']);
+			process.stdout.write(status);
 			return status.trim() === 'running';
 		},
 		4000,

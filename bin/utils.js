@@ -65,7 +65,6 @@ async function retryUntil(logic, ttl, interval = 275) {
 		console.info(`attemp ${attempts - attempt} of ${attempts}...`);
 		try {
 			result = await Promise.resolve(logic());
-			process.stdout.write(result);
 			if (result) {
 				break;
 			}
