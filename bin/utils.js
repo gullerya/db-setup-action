@@ -37,7 +37,7 @@ function _execDocker(params, captureOutput = false) {
 		console.info('/== spawning ' + '='.repeat(51));
 		console.info(`|   docker ${params.join(' ')}`);
 		console.info('\\' + '='.repeat(63));
-		const child = spawn('docker', params, { stdio: [null, 'pipe', 'pipe'] });
+		const child = spawn('docker', params, { stdio: [null, process.stdout, process.stderr] });
 
 		if (captureOutput) {
 			process.stdout.on('data', outputCollector);
