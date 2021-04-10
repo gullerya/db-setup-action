@@ -40,8 +40,8 @@ async function healthCheck(cname, setup) {
 	//	test the container is running
 	const isRunning = await retryUntil(
 		async () => {
-			console.info('sldkfjsldfkj');
-			(await dockerInspect(cname, ['-f', '{{.State.Status}}'])) === 'running'
+			const status = await dockerInspect(cname, ['-f', '{{.State.Status}}']);
+			return status.trim() === 'running';
 		},
 		4000,
 		1000
