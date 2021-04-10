@@ -37,15 +37,15 @@ function _execDocker(params, captureOutput = false) {
 		console.info('/== spawning ' + '='.repeat(51));
 		console.info(`|   docker ${params.join(' ')}`);
 		console.info('\\' + '='.repeat(63));
-		const child = spawn('docker', params, { stdio: [null, process.stdout, process.stderr] });
+		const child = spawn('docker', params, { stdio: [null, null, process.stderr] });
 
 		if (captureOutput) {
-			process.stdout.on('data', outputCollector);
+			child.stdout.on('data', outputCollector);
 		}
 
 		child.on('exit', code => {
 			if (captureOutput) {
-				process.stdout.off('data', outputCollector);
+				child.stdout.off('data', outputCollector);
 			}
 			if (code) {
 				reject(code);
