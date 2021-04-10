@@ -40,7 +40,7 @@ async function healthCheck(dockerName, setup) {
 				'-U',
 				setup.username,
 				'-c',
-				`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'`,
+				`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database} f'`,
 				'-t'
 			])
 				.then(r => {
