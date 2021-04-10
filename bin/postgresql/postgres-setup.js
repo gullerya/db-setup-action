@@ -38,18 +38,18 @@ async function setupPostgres(setup) {
 
 async function healthCheck(cname, setup) {
 	//	test the container is running
-	const isRunning = await retryUntil(
-		async () => {
-			const status = await dockerInspect(cname, ['-f', '{{.State.Status}}']);
-			console.log(status);
-			return status.trim() === 'running';
-		},
-		4000,
-		1000
-	);
-	if (!isRunning) {
-		throw new Error(`postgres container '${cname}' failed to run`);
-	}
+	// const isRunning = await retryUntil(
+	// 	async () => {
+	// 		const status = await dockerInspect(cname, ['-f', '{{.State.Status}}']);
+	// 		console.log(status);
+	// 		return status.trim() === 'running';
+	// 	},
+	// 	4000,
+	// 	1000
+	// );
+	// if (!isRunning) {
+	// 	throw new Error(`postgres container '${cname}' failed to run`);
+	// }
 
 	//	test the DB is available
 	const isDbAvailable = await retryUntil(
