@@ -1,7 +1,16 @@
 const PostgresqlSetup = require('./postgresql/postgres-setup');
 const SQLServerSetup = require('./sqlserver/sqlserver-setup');
 
-(async function main() {
+main()
+	.then(() => {
+		console.info('all done')
+	})
+	.catch(e => {
+		console.error(e);
+		process.exit(1);
+	});
+
+async function main() {
 	const CONFIG = Object.freeze({
 		image: process.env.INPUT_IMAGE,
 		port: process.env.INPUT_PORT,
@@ -23,25 +32,18 @@ const SQLServerSetup = require('./sqlserver/sqlserver-setup');
 	}
 
 	if (!setup) {
-		console.error(`unsupported image/DB '${CONFIG.image}', exiting`);
-		process.exit(1);
+		throw new Error(`unsupported image/DB '${CONFIG.image}'`);
 	}
 
-	try {
-		await setup(CONFIG);
-	} catch (e) {
-		console.error(`setup failed:`);
-		console.error(e);
-		process.exit(1);
-	}
-})();
+	await setup(CONFIG);
+}
 
 function validateSetup(setup) {
 	if (!setup.image) {
-		return `invalid 'image' parameter: [${setup.image}]`;
+		return `invalid 'image' parameter: ${setup.image}`;
 	}
 	if (!setup.port || isNaN(parseInt(setup.port))) {
-		return `invalid 'port' parameter: [${setup.port}]`;
+		return `invalid 'port' parameter: ${setup.port}`;
 	}
 	if (!setup.username) {
 		return `invalid 'username' parameter: [${setup.username}]`;

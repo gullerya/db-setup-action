@@ -53,15 +53,19 @@ async function healthCheck(cname, setup) {
 
 	//	test the DB is available
 	const isDbAvailable = await retryUntil(
-		async () => (await dockerExec([
-			cname,
-			'psql',
-			'-U',
-			setup.username,
-			'-c',
-			`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'`,
-			'-t'
-		])) === '1',
+		async () => {
+			const status = await dockerExec([
+				cname,
+				'psql',
+				'-U',
+				setup.username,
+				'-c',
+				`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'`,
+				'-t'
+			]);
+			console.log(status);
+			return status === '1'
+		},
 		4000,
 		1000
 	);
