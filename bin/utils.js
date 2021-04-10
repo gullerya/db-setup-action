@@ -62,7 +62,7 @@ async function retryUntil(logic, ttl, interval = 275) {
 	let result = false;
 
 	while (attempt--) {
-		console.info(`attemp ${attempt} of ${attempts}...`);
+		console.info(`attemp ${attempts - attempt} of ${attempts}...`);
 		try {
 			result = await Promise.resolve(logic());
 			console.info(result);
@@ -72,7 +72,7 @@ async function retryUntil(logic, ttl, interval = 275) {
 		} catch (e) {
 			console.error(e);
 		}
-		await new Promise(r => setTimeout(r), interval);
+		await new Promise(r => setTimeout(r, interval));
 	}
 
 	return result;
