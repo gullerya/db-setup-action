@@ -63,7 +63,7 @@ async function healthCheck(cname, setup) {
 				`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'`,
 				'-t'
 			]);
-			console.log(status);
+			console.info('db satatus: ' + status);
 			return status === '1'
 		},
 		4000,
