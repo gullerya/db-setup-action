@@ -35,7 +35,7 @@ async function dumpPorts(cname) {
 	return await _execDocker(['port', cname]);
 }
 
-function _execDocker(params, { captureOutput = false, reflectOutput = true }) {
+function _execDocker(params, { captureOutput = false, reflectOutput = true } = { captureOutput: false, reflectOutput: true }) {
 	let output = '';
 	const outputCollector = buffer => {
 		if (captureOutput) {
