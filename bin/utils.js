@@ -42,10 +42,10 @@ function _execDocker(params, { captureOutput = false, reflectOutput = true } = {
 			output += buffer;
 		}
 		if (reflectOutput) {
-			console.info(String(buffer));
+			process.stdout.write(buffer);
 		}
 	}
-	const errorCollector = buffer => console.error(String(buffer));
+	const errorCollector = buffer => process.stderr.write(buffer);
 
 	return new Promise((resolve, reject) => {
 		console.info('/== spawning ' + '='.repeat(51));
