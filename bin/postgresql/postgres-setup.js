@@ -40,7 +40,8 @@ async function healthCheck(cname, setup) {
 	//	test the container is running
 	const isRunning = await retryUntil(
 		async () => (await dockerInspect(cname, ['-f', '{{.State.Status}}'])) === 'running',
-		12000
+		4000,
+		1000
 	);
 	if (!isRunning) {
 		throw new Error(`postgres container '${cname}' failed to run`);
@@ -57,7 +58,8 @@ async function healthCheck(cname, setup) {
 			`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'`,
 			'-t'
 		])) === '1',
-		12000
+		4000,
+		1000
 	);
 	if (!isDbAvailable) {
 		throw new Error(`DB '${setup.database}' is NOT available`);
