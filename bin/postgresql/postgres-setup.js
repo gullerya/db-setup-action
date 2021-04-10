@@ -39,7 +39,7 @@ async function setupPostgres(setup) {
 async function healthCheck(cname, setup) {
 	//	test the container is running
 	const isRunning = await retryUntil(
-		() => (await dockerInspect(cname, ['-f', '{{.State.Status}}'])) === 'running',
+		async () => (await dockerInspect(cname, ['-f', '{{.State.Status}}'])) === 'running',
 		12000
 	);
 	if (!isRunning) {
@@ -48,7 +48,7 @@ async function healthCheck(cname, setup) {
 
 	//	test the DB is available
 	const isDbAvailable = await retryUntil(
-		() => (await dockerExec([
+		async () => (await dockerExec([
 			cname,
 			'psql',
 			'-U',

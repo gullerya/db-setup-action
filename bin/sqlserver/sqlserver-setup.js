@@ -1,4 +1,4 @@
-const { pullDocker, runDocker, dumpPorts } = require('../utils');
+const { pullDocker, dockerRun, dumpPorts } = require('../utils');
 const ACCEPT_EULA_KEY = 'ACCEPT_EULA';
 const SA_PASSWORD_KEY = 'SA_PASSWORD';
 const SQLSERVER_NATIVE_PORT = '1433';
@@ -16,7 +16,7 @@ async function setupSQLServer(setup) {
 	await pullDocker(setup.image);
 
 	const came = 'rdbms-setup-sqlserver-0';
-	await runDocker(came, [
+	await dockerRun(came, [
 		'-e',
 		ACCEPT_EULA_KEY + '=' + process.env.ACCEPT_EULA,
 		'-e',
