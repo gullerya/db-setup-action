@@ -59,16 +59,23 @@ function _execDocker(params, { captureOutput = false, reflectOutput = true } = {
 			child.stdout.on('data', outputCollector);
 		}
 
-		child.on('exit', code => {
+		child.once('exit', code => {
 			child.stderr.off('data', errorCollector);
 			if (captureOutput || reflectOutput) {
 				child.stdout.off('data', outputCollector);
 			}
-			if (code) {
-				reject(code);
-			} else {
+			if (code === 0) {
 				resolve(captureOutput ? output : undefined);
+			} else {
+				reject(code);
 			}
+		});
+		child.once('error', e => {
+			child.stderr.off('data', errorCollector);
+			if (captureOutput || reflectOutput) {
+				child.stdout.off('data', outputCollector);
+			}
+			reject(e);
 		});
 	});
 }
