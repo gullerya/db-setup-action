@@ -14,24 +14,38 @@ async function pullDocker(dockerImage) {
 }
 
 async function dockerRun(cname, params) {
-	return await _execDocker(['run', '-d', '--rm', '--name', cname, ...params], true);
+	return await _execDocker(['run', '-d', '--rm', '--name', cname, ...params], {
+		captureOutput: true
+	});
 }
 
 async function dockerExec(params) {
-	return await _execDocker(['exec', '-t', ...params], true);
+	return await _execDocker(['exec', '-t', ...params], {
+		captureOutput: true
+	});
 }
 
 async function dockerInspect(cname, params) {
-	return await _execDocker(['inspect', cname, ...params], true);
+	return await _execDocker(['inspect', cname, ...params], {
+		captureOutput: true
+	});
 }
 
 async function dumpPorts(cname) {
 	return await _execDocker(['port', cname]);
 }
 
-function _execDocker(params, captureOutput = false) {
+function _execDocker(params, { captureOutput = false, reflectOutput = true }) {
 	let output = '';
-	const outputCollector = buffer => output += buffer;
+	const outputCollector = buffer => {
+		if (captureOutput) {
+			output += buffer;
+		}
+		if (reflectOutput) {
+			console.info(String(buffer));
+		}
+	}
+	const errorCollector = buffer => console.error(String(buffer));
 
 	return new Promise((resolve, reject) => {
 		console.info('/== spawning ' + '='.repeat(51));
@@ -39,12 +53,14 @@ function _execDocker(params, captureOutput = false) {
 		console.info('\\' + '='.repeat(63));
 		const child = spawn('docker', params);
 
-		if (captureOutput) {
+		child.stderr.on('data', errorCollector);
+		if (captureOutput || reflectOutput) {
 			child.stdout.on('data', outputCollector);
 		}
 
 		child.on('exit', code => {
-			if (captureOutput) {
+			child.stderr.off('data', errorCollector);
+			if (captureOutput || reflectOutput) {
 				child.stdout.off('data', outputCollector);
 			}
 			if (code) {
