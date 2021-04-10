@@ -2,25 +2,31 @@ const { spawn } = require('child_process');
 
 module.exports = {
 	pullDocker,
-	runDocker,
-	execDocker,
+	dockerRun,
+	dockerExec,
+	dockerInspect,
 	dumpPorts,
+	retryUntil
 };
 
 async function pullDocker(dockerImage) {
 	return await _execDocker(['pull', dockerImage]);
 }
 
-async function runDocker(params) {
-	return await _execDocker(['run', '-d', '--rm', ...params], true);
+async function dockerRun(cname, params) {
+	return await _execDocker(['run', '-d', '--rm', '--name', cname, ...params], true);
 }
 
-async function execDocker(params) {
+async function dockerExec(params) {
 	return await _execDocker(['exec', '-t', ...params], true);
 }
 
-async function dumpPorts(dockerName) {
-	return await _execDocker(['port', dockerName]);
+async function dockerInspect(cname, params) {
+	return await _execDocker(['inspect', cname, ...params], true);
+}
+
+async function dumpPorts(cname) {
+	return await _execDocker(['port', cname]);
 }
 
 function _execDocker(params, captureOutput = false) {
@@ -47,5 +53,26 @@ function _execDocker(params, captureOutput = false) {
 				resolve(captureOutput ? output : undefined);
 			}
 		});
+	});
+}
+
+async function retryUntil(logic, ttl, interval = 275) {
+	return new Promise(resolve => {
+		const attempts = ttl / interval;
+		let attempt = attempts;
+		let result = false;
+
+		while (attempt--) {
+			console.log(`attemp ${attempt} of ${attempts}...`);
+			try {
+				result = await Promise.resolve(logic());
+				if (result) {
+					break;
+				}
+			} catch (e) { }
+			await new Promise(r => setTimeout(r), interval);
+		}
+
+		resolve(result);
 	});
 }

@@ -1,4 +1,11 @@
-const { pullDocker, runDocker, execDocker, dumpPorts } = require('../utils');
+const {
+	pullDocker,
+	dockerRun,
+	dockerExec,
+	dockerInspect,
+	dumpPorts,
+	retryUntil
+} = require('../utils');
 const POSTGRES_USER_KEY = 'POSTGRES_USER';
 const POSTGRES_PASSWORD_KEY = 'POSTGRES_PASSWORD';
 const POSTGRES_DB_KEY = 'POSTGRES_DB';
@@ -11,10 +18,8 @@ module.exports = {
 async function setupPostgres(setup) {
 	await pullDocker(setup.image);
 
-	const dockerName = 'rdbms-setup-postgresql-0';
-	await runDocker([
-		'--name',
-		dockerName,
+	const cname = 'rdbms-setup-postgresql-0';
+	await dockerRun(cname, [
 		'-e',
 		POSTGRES_USER_KEY + '=' + setup.username,
 		'-e',
@@ -26,31 +31,35 @@ async function setupPostgres(setup) {
 		setup.image
 	]);
 
-	await dumpPorts(dockerName);
+	await dumpPorts(cname);
 
-	await healthCheck(dockerName, setup);
+	await healthCheck(cname, setup);
 }
 
-async function healthCheck(dockerName, setup) {
-	return new Promise((resolve, reject) => {
-		setTimeout(() => {
-			execDocker([
-				dockerName,
-				'psql',
-				'-U',
-				setup.username,
-				'-c',
-				`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database} f'`,
-				'-t'
-			])
-				.then(r => {
-					console.log(r);
-					resolve();
-				})
-				.catch(e => {
-					console.log(e);
-					reject(e);
-				});
-		}, 12000);
-	});
+async function healthCheck(cname, setup) {
+	//	test the container is running
+	const isRunning = await retryUntil(
+		() => (await dockerInspect(cname, ['-f', '{{.State.Status}}'])) === 'running',
+		12000
+	);
+	if (!isRunning) {
+		throw new Error(`postgres container '${cname}' failed to run`);
+	}
+
+	//	test the DB is available
+	const isDbAvailable = await retryUntil(
+		() => (await dockerExec([
+			cname,
+			'psql',
+			'-U',
+			setup.username,
+			'-c',
+			`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'`,
+			'-t'
+		])) === '1',
+		12000
+	);
+	if (!isDbAvailable) {
+		throw new Error(`DB '${setup.database}' is NOT available`);
+	}
 }

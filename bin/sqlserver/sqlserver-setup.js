@@ -15,10 +15,8 @@ async function setupSQLServer(setup) {
 
 	await pullDocker(setup.image);
 
-	const dockerName = 'rdbms-setup-sqlserver-0';
-	await runDocker([
-		'--name',
-		dockerName,
+	const came = 'rdbms-setup-sqlserver-0';
+	await runDocker(came, [
 		'-e',
 		ACCEPT_EULA_KEY + '=' + process.env.ACCEPT_EULA,
 		'-e',
@@ -28,7 +26,7 @@ async function setupSQLServer(setup) {
 		setup.image
 	]);
 
-	await dumpPorts(dockerName);
+	await dumpPorts(came);
 
 	//	TODO: health ckeck
 }
