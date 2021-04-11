@@ -3,7 +3,8 @@ const SQLServerSetup = require('./sqlserver/sqlserver-setup');
 
 main()
 	.then(() => {
-		console.info('all done')
+		console.info();
+		console.info('all done');
 	})
 	.catch(e => {
 		console.error(e);
