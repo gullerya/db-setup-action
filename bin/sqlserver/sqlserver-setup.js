@@ -60,12 +60,20 @@ async function healthCheck(cname, setup) {
 	const isDBServerAvailable = await retryUntil(
 		'Assert SQLServer available',
 		async () => {
+			let result = false;
 			const status = await dockerExec([`${cname} /opt/mssql-tools/bin/sqlcmd -U ${setup.username} -P ${setup.password} -Q "SELECT @@version"`]);
 			const lines = status.split(/([\n\r]+)/);
-			console.info(lines[0]);
-			console.info(lines[1]);
-			console.info(lines[2]);
-			return status.trim() === '1'
+			for (const line of lines) {
+				if (/.*SQL\s*Server.*/.test(line)) {
+					result = true;
+					const vRegExpResult = line.match(/.*-\s*(?<version>[.0-9]+).*/);
+					if (vRegExpResult.groups && vRegExpResult.groups.version) {
+						console.info(`SQL Server is available; version ${vRegExpResult.groups.version}`);
+					}
+					break;
+				}
+			}
+			return result;
 		},
 		{
 			ttl: 4000
