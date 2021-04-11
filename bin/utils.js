@@ -60,10 +60,8 @@ function _execDocker(params, { captureOutput = false, reflectOutput = true } = {
 		}
 
 		child.once('exit', code => {
+			child.stdout.off('data', outputCollector);
 			child.stderr.off('data', errorCollector);
-			if (captureOutput || reflectOutput) {
-				child.stdout.off('data', outputCollector);
-			}
 			if (code === 0) {
 				resolve(captureOutput ? output : undefined);
 			} else {
@@ -71,10 +69,8 @@ function _execDocker(params, { captureOutput = false, reflectOutput = true } = {
 			}
 		});
 		child.once('error', e => {
+			child.stdout.off('data', outputCollector);
 			child.stderr.off('data', errorCollector);
-			if (captureOutput || reflectOutput) {
-				child.stdout.off('data', outputCollector);
-			}
 			reject(e);
 		});
 	});
