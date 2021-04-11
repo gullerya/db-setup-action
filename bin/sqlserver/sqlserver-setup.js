@@ -68,7 +68,7 @@ async function healthCheck(cname, setup) {
 				'-P',
 				setup.password,
 				'-Q',
-				'\"SELECT @@version\"'
+				'\'SELECT @@VERSION\''
 			]);
 			return status.trim() === '1'
 		},
