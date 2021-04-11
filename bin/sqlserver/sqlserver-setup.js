@@ -64,7 +64,7 @@ async function healthCheck(cname, setup) {
 		},
 		{
 			title: `Assert SQLServer available`,
-			ttl: 12000,
+			ttl: 25000,
 			interval: 1000
 		}
 	);
