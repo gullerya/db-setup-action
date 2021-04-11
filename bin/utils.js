@@ -1,4 +1,4 @@
-const { spawn } = require('child_process');
+const { exec, spawn } = require('child_process');
 
 module.exports = {
 	pullDocker,
@@ -52,7 +52,7 @@ function _execDocker(params, { captureOutput = false, reflectOutput = true } = {
 		console.info('=== spawning ' + '='.repeat(51));
 		console.info(`docker ${params.join(' ')}`);
 		console.info('='.repeat(64));
-		const child = spawn('docker', params, { windowsVerbatimArguments: true });
+		const child = exec(`docker ${params.join(' ')}`);
 
 		child.stderr.on('data', errorCollector);
 		if (captureOutput || reflectOutput) {
