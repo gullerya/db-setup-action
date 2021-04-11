@@ -62,7 +62,7 @@ async function healthCheck(cname, setup) {
 		async () => {
 			const status = await dockerExec([
 				cname,
-				'sqlcmd',
+				'/opt/mssql-tools/bin/sqlcmd',
 				'-U',
 				setup.username,
 				'-Q',
@@ -72,7 +72,7 @@ async function healthCheck(cname, setup) {
 			return status.trim() === '1'
 		},
 		{
-			title: `Assert DB '${setup.database}' available`,
+			title: `Assert SQLServer available`,
 			ttl: 4000
 		}
 	);
