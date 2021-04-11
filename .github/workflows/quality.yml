@@ -34,7 +34,7 @@ jobs:
           image: 'mcr.microsoft.com/mssql/server:2019-latest'
           port: 1433
           username: sa
-          password: Pa$$w0rd
+          password: Passw0rd
           database: testdb
 
       - name: Test setup
