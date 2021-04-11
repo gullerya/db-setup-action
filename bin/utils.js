@@ -52,7 +52,7 @@ function _execDocker(params, { captureOutput = false, reflectOutput = true } = {
 		console.info('=== spawning ' + '='.repeat(51));
 		console.info(`docker ${params.join(' ')}`);
 		console.info('='.repeat(64));
-		const child = spawn('docker', params);
+		const child = spawn('docker', params, { windowsVerbatimArguments: true });
 
 		child.stderr.on('data', errorCollector);
 		if (captureOutput || reflectOutput) {
