@@ -39,12 +39,12 @@ async function setupPostgres(setup) {
 async function healthCheck(cname, setup) {
 	//	test the container is running
 	const isRunning = await retryUntil(
+		'Assert container is running',
 		async () => {
 			const status = await dockerInspect(cname, ['-f', '{{.State.Status}}']);
 			return status.trim() === 'running';
 		},
 		{
-			title: 'Assert container is running',
 			ttl: 4000
 		}
 	);
@@ -54,12 +54,12 @@ async function healthCheck(cname, setup) {
 
 	//	test the DB is available
 	const isDbAvailable = await retryUntil(
+		`Assert DB '${setup.database}' available`,
 		async () => {
 			const status = await dockerExec([`${cname} psql -U ${setup.username} -c "SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'" -t`]);
 			return status.trim() === '1'
 		},
 		{
-			title: `Assert DB '${setup.database}' available`,
 			ttl: 4000
 		}
 	);

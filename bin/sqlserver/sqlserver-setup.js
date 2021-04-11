@@ -25,9 +25,9 @@ async function setupSQLServer(setup) {
 	const cname = 'rdbms-setup-sqlserver-0';
 	await dockerRun(cname, [
 		'-e',
-		"'" + ACCEPT_EULA_KEY + '=' + process.env.ACCEPT_EULA + "'",
+		ACCEPT_EULA_KEY + '=' + process.env.ACCEPT_EULA,
 		'-e',
-		"'" + SA_PASSWORD_KEY + '=' + setup.password + "'",
+		SA_PASSWORD_KEY + '=' + setup.password,
 		'-p',
 		setup.port + ':' + SQLSERVER_NATIVE_PORT,
 		setup.image
@@ -43,12 +43,12 @@ async function setupSQLServer(setup) {
 async function healthCheck(cname, setup) {
 	//	test the container is running
 	const isRunning = await retryUntil(
+		'Assert container is running',
 		async () => {
 			const status = await dockerInspect(cname, ['-f', '{{.State.Status}}']);
 			return status.trim() === 'running';
 		},
 		{
-			title: 'Assert container is running',
 			ttl: 4000
 		}
 	);
@@ -58,14 +58,17 @@ async function healthCheck(cname, setup) {
 
 	//	test the DB is available
 	const isDBServerAvailable = await retryUntil(
+		'Assert SQLServer available',
 		async () => {
-			const status = await dockerExec([cname + ' /opt/mssql-tools/bin/sqlcmd -S localhost -U ' + setup.username + ' -P ' + setup.password + ' -Q "SELECT @@version"']);
+			const status = await dockerExec([`${cname} /opt/mssql-tools/bin/sqlcmd -U ${setup.username} -P ${setup.password} -Q "SELECT @@version"`]);
+			const lines = status.split(/([\n\r]+)/);
+			console.info(lines[0]);
+			console.info(lines[1]);
+			console.info(lines[2]);
 			return status.trim() === '1'
 		},
 		{
-			title: `Assert SQLServer available`,
-			ttl: 25000,
-			interval: 1000
+			ttl: 4000
 		}
 	);
 	if (!isDBServerAvailable) {

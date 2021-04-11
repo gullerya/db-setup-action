@@ -76,7 +76,7 @@ function _execDocker(params, { captureOutput = false, reflectOutput = true } = {
 	});
 }
 
-async function retryUntil(logic, { title, ttl, interval = 453 }) {
+async function retryUntil(title, logic, { ttl, interval = 453 }) {
 	let result = false;
 
 	const attempts = Math.ceil(ttl / interval);
