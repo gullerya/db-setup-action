@@ -7,7 +7,7 @@ const {
 	retryUntil
 } = require('../utils');
 const ACCEPT_EULA_KEY = 'ACCEPT_EULA';
-const SA_PASSWORD_KEY = 'SA_PASSWORD';
+const SA_PASSWORD_KEY = 'MSSQL_SA_PASSWORD';
 const SQLSERVER_NATIVE_PORT = '1433';
 
 module.exports = {
