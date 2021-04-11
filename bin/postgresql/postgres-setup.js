@@ -67,7 +67,7 @@ async function healthCheck(cname, setup) {
 			return status.trim() === '1'
 		},
 		{
-			title: `Assert DB ${setup.database} available`,
+			title: `Assert DB '${setup.database}' available`,
 			ttl: 4000
 		}
 	);
