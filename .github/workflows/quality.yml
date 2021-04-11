@@ -1,4 +1,4 @@
-name: Quality pipeline
+name: Quality
 
 on: [push]
 
