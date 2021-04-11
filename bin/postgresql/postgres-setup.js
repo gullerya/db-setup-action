@@ -43,8 +43,10 @@ async function healthCheck(cname, setup) {
 			const status = await dockerInspect(cname, ['-f', '{{.State.Status}}']);
 			return status.trim() === 'running';
 		},
-		4000,
-		500
+		{
+			title: 'Assert container is running',
+			ttl: 4000
+		}
 	);
 	if (!isRunning) {
 		throw new Error(`postgres container '${cname}' failed to run`);
@@ -64,8 +66,10 @@ async function healthCheck(cname, setup) {
 			]);
 			return status.trim() === '1'
 		},
-		4000,
-		500
+		{
+			title: `Assert DB ${setup.database} available`,
+			ttl: 4000
+		}
 	);
 	if (!isDbAvailable) {
 		throw new Error(`DB '${setup.database}' is NOT available`);

@@ -76,13 +76,15 @@ function _execDocker(params, { captureOutput = false, reflectOutput = true } = {
 	});
 }
 
-async function retryUntil(logic, ttl, interval = 275) {
-	const attempts = ttl / interval;
-	let attempt = attempts;
+async function retryUntil(logic, { title, ttl, interval = 453 }) {
 	let result = false;
 
-	while (attempt--) {
-		console.info(`attemp ${attempts - attempt} of ${attempts}...`);
+	const attempts = Math.ceil(ttl / interval);
+	let counter = attempts;
+
+	while (counter--) {
+		console.info();
+		console.info(`${title ? (title + ': ') : ''}attempt ${attempts - counter} of ${attempts}...`);
 		try {
 			result = await Promise.resolve(logic());
 			if (result) {
