@@ -84,8 +84,8 @@ async function createValidateDB(cname, setup) {
 	const isDBCreated = await retryUntil(
 		`Create user defined DB '${setup.database}'`,
 		async () => {
-			const status = await dockerExec([`${cname} /opt/mssql-tools/bin/sqlcmd -U ${setup.username} -P ${setup.password} -Q "CREATE DATABASE '${setup.database}'; SELECT COUNT(*) FROM master.sys.databases WHERE name = '${setup.database}'"`]);
-			return status.includes('1');
+			const status = await dockerExec([`${cname} /opt/mssql-tools/bin/sqlcmd -U ${setup.username} -P ${setup.password} -h -1 -W -Q "CREATE DATABASE [${setup.database}]; SELECT COUNT(*) FROM master.sys.databases WHERE name = '${setup.database}'"`]);
+			return status.split(/[\n\r]+/)[0].trim() === '1';
 		},
 		{
 			ttl: 4000
