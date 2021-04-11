@@ -65,6 +65,8 @@ async function healthCheck(cname, setup) {
 				'/opt/mssql-tools/bin/sqlcmd',
 				'-U',
 				setup.username,
+				'-P',
+				setup.password,
 				'-Q',
 				`"SELECT @@VERSION"`,
 			]);
