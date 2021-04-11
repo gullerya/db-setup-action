@@ -67,7 +67,6 @@ async function healthCheck(cname, setup) {
 				setup.username,
 				'-Q',
 				`SELECT @@VERSION`,
-				'-t'
 			]);
 			return status.trim() === '1'
 		},
@@ -91,7 +90,6 @@ async function createValidateDB(cname, setup) {
 				setup.username,
 				'-c',
 				`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'`,
-				'-t'
 			]);
 			return status.trim() === '1'
 		},
