@@ -1,4 +1,4 @@
-const { exec, spawn } = require('child_process');
+const { exec } = require('child_process');
 
 module.exports = {
 	pullDocker,
@@ -49,7 +49,7 @@ function _execDocker(params, { captureOutput = false, reflectOutput = true } = {
 
 	return new Promise((resolve, reject) => {
 		console.info();
-		console.info('=== spawning ' + '='.repeat(51));
+		console.info('=== executing ' + '='.repeat(50));
 		console.info(`docker ${params.join(' ')}`);
 		console.info('='.repeat(64));
 		const child = exec(`docker ${params.join(' ')}`);

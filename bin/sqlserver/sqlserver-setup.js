@@ -57,19 +57,9 @@ async function healthCheck(cname, setup) {
 	}
 
 	//	test the DB is available
-	// sqlcmd '-Usa' '-Slocalhost,1401' '-Q"SELECT @@VERSION"' '-PSecretP@ssw0rd'
 	const isDBServerAvailable = await retryUntil(
 		async () => {
-			const status = await dockerExec([
-				cname,
-				'/opt/mssql-tools/bin/sqlcmd',
-				'-U',
-				setup.username,
-				'-P',
-				setup.password,
-				'-Q',
-				'"SELECT @@version"'
-			]);
+			const status = await dockerExec([`${cname} /opt/mssql-tools/bin/sqlcmd -U ${setup.username} -P ${setup.password} -Q "SELECT @@version"`]);
 			return status.trim() === '1'
 		},
 		{
