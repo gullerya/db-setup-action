@@ -37,7 +37,7 @@ async function setupSQLServer(setup) {
 
 	await healthCheck(cname, setup);
 
-	// await createValidateDB(cname, setup);
+	await createValidateDB(cname, setup);
 }
 
 async function healthCheck(cname, setup) {
@@ -66,10 +66,6 @@ async function healthCheck(cname, setup) {
 			for (const line of lines) {
 				if (/.*SQL\s*Server.*/.test(line)) {
 					result = true;
-					const vRegExpResult = line.match(/.*-\s*(?<version>[.0-9]+).*/);
-					if (vRegExpResult.groups && vRegExpResult.groups.version) {
-						console.info(`SQL Server is available; version ${vRegExpResult.groups.version}`);
-					}
 					break;
 				}
 			}
@@ -86,23 +82,16 @@ async function healthCheck(cname, setup) {
 
 async function createValidateDB(cname, setup) {
 	const isDBCreated = await retryUntil(
+		`Create user defined DB '${setup.database}'`,
 		async () => {
-			const status = await dockerExec([
-				cname,
-				'psql',
-				'-U',
-				setup.username,
-				'-c',
-				`SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'`,
-			]);
+			const status = await dockerExec([`${cname} /opt/mssql-tools/bin/sqlcmd -U ${setup.username} -P ${setup.password} -Q "CREATE DATABASE ${setup.database}; SELECT COUNT(*) FROM master.sys.databases WHERE name = N'${setup.database}'`]);
 			return status.trim() === '1'
 		},
 		{
-			title: `Assert DB '${setup.database}' available`,
 			ttl: 4000
 		}
 	);
 	if (!isDBCreated) {
-		throw new Error(`DB '${setup.database}' is NOT available`);
+		throw new Error(`DB '${setup.database}' failed to create`);
 	}
 }
