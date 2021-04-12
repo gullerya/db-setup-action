@@ -30,7 +30,7 @@ Main purpose of this action is to provide an easy and maximum possibly uniform s
 
 ```yml
 name: Setup local PostgreSQL
-uses: actions/db-setup-action
+uses: gullerya/db-setup-action@v1
 with:
   image: 'postgres:alpine'
   port: 5432
@@ -47,7 +47,7 @@ Full Docker images list [find here](https://hub.docker.com/_/postgres?tab=tags&p
 
 ```yml
 name: Setup SQLServer
-uses: ./
+uses: gullerya/db-setup-action@v1
 env:
   ACCEPT_EULA: 'Y'
 with:

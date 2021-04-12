@@ -1,6 +1,6 @@
 {
 	"name": "db-setup-action",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"description": "DB Setup (GitHub) Action",
 	"keywords": [
 		"object",
