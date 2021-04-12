@@ -22,7 +22,7 @@ async function setupSQLServer(setup) {
 
 	await pullDocker(setup.image);
 
-	const cname = 'rdbms-setup-sqlserver-0';
+	const cname = 'db-setup-sqlserver-0';
 	await dockerRun(cname, [
 		'-e',
 		ACCEPT_EULA_KEY + '=' + process.env.ACCEPT_EULA,

@@ -18,7 +18,7 @@ module.exports = {
 async function setupPostgres(setup) {
 	await pullDocker(setup.image);
 
-	const cname = 'rdbms-setup-postgresql-0';
+	const cname = 'db-setup-postgresql-0';
 	await dockerRun(cname, [
 		'-e',
 		POSTGRES_USER_KEY + '=' + setup.username,

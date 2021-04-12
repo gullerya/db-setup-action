@@ -1,13 +1,13 @@
-name: 'RDBMS Setup'
+name: 'DB Setup'
 author: 'Yuri Guller - gullerya@gmail.com'
 branding:
   icon: 'database'  
   color: 'blue'
-description: 'RDBMS Setup automation'
+description: 'DB Setup automation'
 
 inputs:
   image:
-    description: 'RDBMS Docker image (choose from the lists in the documentation)'
+    description: 'DB Docker image (choose from the lists in the documentation)'
     required: true
   port:
     description: 'Port to expose the DB on'

@@ -1,8 +1,8 @@
-# RDBMS Setup action
+# DB Setup action
 
-[![Quality](https://github.com/gullerya/rdbms-setup-action/actions/workflows/quality.yml/badge.svg)](https://github.com/gullerya/rdbms-setup-action/actions/workflows/quality.yml)
+[![Quality](https://github.com/gullerya/db-setup-action/actions/workflows/quality.yml/badge.svg)](https://github.com/gullerya/db-setup-action/actions/workflows/quality.yml)
 
-`rdbms-setup-action` automates install and run of the local RDBMS (Docker based).
+`db-setup-action` automates install and run of the local DB (Docker based).
 
 Currently supported:
 - PostgreSQL
@@ -10,7 +10,7 @@ Currently supported:
 
 The installation uses official Docker images, see the links in per-DB section below.
 
-Main purpose of this action is to provide an easy and maximum possibly uniform setup of RDBMS server/s for tests automation.
+Main purpose of this action is to provide an easy and maximum possibly uniform setup of DB server/s for tests automation.
 
 ## Inputs
 
@@ -30,7 +30,7 @@ Main purpose of this action is to provide an easy and maximum possibly uniform s
 
 ```yml
 name: Setup local PostgreSQL
-uses: actions/rdbms-setup-action
+uses: actions/db-setup-action
 with:
   image: 'postgres:alpine'
   port: 5432
