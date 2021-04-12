@@ -54,7 +54,7 @@ with:
   image: 'mcr.microsoft.com/mssql/server:2019-latest'
   port: 1433
   username: sa
-  password: Pa$$w0rd
+  password: Passw0rd
   database: testdb
 ```
 
@@ -66,3 +66,5 @@ In case of SQLServer please pay attention to the following:
 - you MUST set environment variable `ACCEPT_EULA=Y` to express your awareness of it
 - the `username` MUST be `sa`
 - the `password` MUST meet strength requirements as per [this documentation (scroll to the `SA_PASSWORD` section)](https://hub.docker.com/_/microsoft-mssql-server)
+
+> Note: while the password strength may lead to use some special characters, it is better to avoid chars like `$`, `@` since they may cause misinterpretation issues during the docker execution. Let me know of any issue encounterd with this.
