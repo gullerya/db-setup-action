@@ -1,7 +1,7 @@
 name: Release
 
 on:
-  manual_trigger:
+  workflow_trigger:
     inputs:
       version:
         description: Desired version to release (vX.Y.Z)
