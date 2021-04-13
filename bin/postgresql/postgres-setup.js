@@ -12,10 +12,15 @@ const POSTGRES_DB_KEY = 'POSTGRES_DB';
 const POSTGRES_NATIVE_PORT = '5432';
 
 module.exports = {
-	setupPostgres
+	isMine,
+	setup
 };
 
-async function setupPostgres(setup) {
+function isMine(dockerImage) {
+	return dockerImage.toLowerCase().includes('postgres');
+}
+
+async function setup(setup) {
 	await pullDocker(setup.image);
 
 	const cname = 'db-setup-postgresql-0';

@@ -11,10 +11,15 @@ const SA_PASSWORD_KEY = 'SA_PASSWORD';
 const SQLSERVER_NATIVE_PORT = '1433';
 
 module.exports = {
-	setupSQLServer
+	isMine,
+	setup
 };
 
-async function setupSQLServer(setup) {
+function isMine(dockerImage) {
+	return dockerImage.toLowerCase().includes('mssql');
+}
+
+async function setup(setup) {
 	const ACCEPT_EULA = process.env[ACCEPT_EULA_KEY];
 	if (typeof ACCEPT_EULA !== 'string' || ACCEPT_EULA.toLowerCase() !== 'y') {
 		throw new Error(`for SQLServer, please set "${ACCEPT_EULA_KEY}=Y" environment variable, meaning you are aware of it`);

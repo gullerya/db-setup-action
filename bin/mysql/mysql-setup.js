@@ -14,10 +14,15 @@ const MYSQL_DB_KEY = 'MYSQL_DATABASE';
 const MYSQL_NATIVE_PORT = '3306';
 
 module.exports = {
-	setupMySQL
+	isMine,
+	setup
 };
 
-async function setupMySQL(setup) {
+function isMine(dockerImage) {
+	return dockerImage.toLowerCase().includes('mysql');
+}
+
+async function setup(setup) {
 	await pullDocker(setup.image);
 
 	const cname = 'db-setup-mysql-0';
