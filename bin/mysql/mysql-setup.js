@@ -6,10 +6,12 @@ const {
 	dumpPorts,
 	retryUntil
 } = require('../utils');
-const POSTGRES_USER_KEY = 'POSTGRES_USER';
-const POSTGRES_PASSWORD_KEY = 'POSTGRES_PASSWORD';
-const POSTGRES_DB_KEY = 'POSTGRES_DB';
-const POSTGRES_NATIVE_PORT = '5432';
+
+const MYSQL_RANDOM_ROOT_PASS = 'MYSQL_RANDOM_ROOT_PASSWORD';
+const MYSQL_USER_KEY = 'MYSQL_USER';
+const MYSQL_PASS_KEY = 'MYSQL_PASSWORD';
+const MYSQL_DB_KEY = 'MYSQL_DATABASE';
+const MYSQL_NATIVE_PORT = '3306';
 
 module.exports = {
 	isMine,
@@ -17,22 +19,24 @@ module.exports = {
 };
 
 function isMine(dockerImage) {
-	return dockerImage.toLowerCase().includes('postgres');
+	return dockerImage.toLowerCase().includes('mysql');
 }
 
 async function setup(config) {
 	await pullDocker(config.image);
 
-	const cname = 'db-setup-postgresql-0';
+	const cname = 'db-setup-mysql-0';
 	await dockerRun(cname, [
 		'-e',
-		POSTGRES_USER_KEY + '=' + config.username,
+		MYSQL_RANDOM_ROOT_PASS + '=Y',
 		'-e',
-		POSTGRES_PASSWORD_KEY + '=' + config.password,
+		MYSQL_USER_KEY + '=' + config.username,
 		'-e',
-		POSTGRES_DB_KEY + '=' + config.database,
+		MYSQL_PASS_KEY + '=' + config.password,
+		'-e',
+		MYSQL_DB_KEY + '=' + config.database,
 		'-p',
-		config.port + ':' + POSTGRES_NATIVE_PORT,
+		config.port + ':' + MYSQL_NATIVE_PORT,
 		config.image
 	]);
 
@@ -61,11 +65,14 @@ async function healthCheck(cname, config) {
 	const isDbAvailable = await retryUntil(
 		`Assert DB '${config.database}' available`,
 		async () => {
-			const status = await dockerExec([`${cname} psql -U ${config.username} -c "SELECT COUNT(*) FROM pg_database WHERE datname='${config.database}'" -t`]);
-			return status.trim() === '1'
+			const status = await dockerExec([
+				`${cname} mysql -u${config.username} -p${config.password} -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='${config.database}'" -s`
+			]);
+			return /^[\s\S]*COUNT\(\*\)[\s\S]*1[\s\S]*$/.test(status);
 		},
 		{
-			ttl: 4000
+			ttl: 16000,
+			interval: 2000
 		}
 	);
 	if (!isDbAvailable) {

@@ -11,36 +11,41 @@ const SA_PASSWORD_KEY = 'SA_PASSWORD';
 const SQLSERVER_NATIVE_PORT = '1433';
 
 module.exports = {
-	setupSQLServer
+	isMine,
+	setup
 };
 
-async function setupSQLServer(setup) {
+function isMine(dockerImage) {
+	return dockerImage.toLowerCase().includes('mssql');
+}
+
+async function setup(config) {
 	const ACCEPT_EULA = process.env[ACCEPT_EULA_KEY];
 	if (typeof ACCEPT_EULA !== 'string' || ACCEPT_EULA.toLowerCase() !== 'y') {
 		throw new Error(`for SQLServer, please set "${ACCEPT_EULA_KEY}=Y" environment variable, meaning you are aware of it`);
 	}
 
-	await pullDocker(setup.image);
+	await pullDocker(config.image);
 
 	const cname = 'db-setup-sqlserver-0';
 	await dockerRun(cname, [
 		'-e',
 		ACCEPT_EULA_KEY + '=' + process.env.ACCEPT_EULA,
 		'-e',
-		SA_PASSWORD_KEY + '=' + setup.password,
+		SA_PASSWORD_KEY + '=' + config.password,
 		'-p',
-		setup.port + ':' + SQLSERVER_NATIVE_PORT,
-		setup.image
+		config.port + ':' + SQLSERVER_NATIVE_PORT,
+		config.image
 	]);
 
 	await dumpPorts(cname);
 
-	await healthCheck(cname, setup);
+	await healthCheck(cname, config);
 
-	await createValidateDB(cname, setup);
+	await createValidateDB(cname, config);
 }
 
-async function healthCheck(cname, setup) {
+async function healthCheck(cname, config) {
 	//	test the container is running
 	const isRunning = await retryUntil(
 		'Assert container is running',
@@ -53,15 +58,15 @@ async function healthCheck(cname, setup) {
 		}
 	);
 	if (!isRunning) {
-		throw new Error(`postgres container '${cname}' failed to run`);
+		throw new Error(`DB container '${cname}' failed to run`);
 	}
 
 	//	test the DB is available
 	const isDBServerAvailable = await retryUntil(
-		'Assert SQLServer available',
+		'Assert DBServer available',
 		async () => {
 			let result = false;
-			const status = await dockerExec([`${cname} /opt/mssql-tools/bin/sqlcmd -U ${setup.username} -P ${setup.password} -Q "SELECT @@version"`]);
+			const status = await dockerExec([`${cname} /opt/mssql-tools/bin/sqlcmd -U ${config.username} -P ${config.password} -Q "SELECT @@version"`]);
 			const lines = status.split(/([\n\r]+)/);
 			for (const line of lines) {
 				if (/.*SQL\s*Server.*/.test(line)) {
@@ -76,15 +81,15 @@ async function healthCheck(cname, setup) {
 		}
 	);
 	if (!isDBServerAvailable) {
-		throw new Error(`DB '${setup.database}' is NOT available`);
+		throw new Error(`DB '${config.database}' is NOT available`);
 	}
 }
 
-async function createValidateDB(cname, setup) {
+async function createValidateDB(cname, config) {
 	const isDBCreated = await retryUntil(
-		`Create user defined DB '${setup.database}'`,
+		`Create user defined DB '${config.database}'`,
 		async () => {
-			const status = await dockerExec([`${cname} /opt/mssql-tools/bin/sqlcmd -U ${setup.username} -P ${setup.password} -h -1 -W -Q "CREATE DATABASE [${setup.database}]; SELECT COUNT(*) FROM master.sys.databases WHERE name = '${setup.database}'"`]);
+			const status = await dockerExec([`${cname} /opt/mssql-tools/bin/sqlcmd -U ${config.username} -P ${config.password} -h -1 -W -Q "CREATE DATABASE [${config.database}]; SELECT COUNT(*) FROM master.sys.databases WHERE name = '${config.database}'"`]);
 			return status.split(/[\n\r]+/)[0].trim() === '1';
 		},
 		{
@@ -92,6 +97,6 @@ async function createValidateDB(cname, setup) {
 		}
 	);
 	if (!isDBCreated) {
-		throw new Error(`DB '${setup.database}' failed to create`);
+		throw new Error(`DB '${config.database}' failed to create`);
 	}
 }

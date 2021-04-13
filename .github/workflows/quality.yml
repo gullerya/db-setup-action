@@ -20,21 +20,19 @@ jobs:
       - name: Lint
         run: npm run lint
 
-  verify-sqlserver-setup:
+  verify-mysql-setup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup SQLServer
+      - name: Setup MySQL
         uses: ./
-        env:
-          ACCEPT_EULA: 'Y'
         with:
-          image: 'mcr.microsoft.com/mssql/server:2019-latest'
-          port: 1433
-          username: sa
-          password: Passw0rd
+          image: 'mysql:latest'
+          port: 3306
+          username: mysqluser
+          password: mysqlpass
           database: testdb
 
       - name: Test setup
@@ -53,6 +51,26 @@ jobs:
           port: 5432
           username: postgres
           password: postgres
+          database: testdb
+
+      - name: Test setup
+        run: echo "TBD"
+
+  verify-sqlserver-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup SQLServer
+        uses: ./
+        env:
+          ACCEPT_EULA: Y
+        with:
+          image: 'mcr.microsoft.com/mssql/server:2019-latest'
+          port: 1433
+          username: sa
+          password: Passw0rd
           database: testdb
 
       - name: Test setup

@@ -1,5 +1,5 @@
-const PostgresqlSetup = require('./postgresql/postgres-setup');
-const SQLServerSetup = require('./sqlserver/sqlserver-setup');
+const fs = require('fs');
+const path = require('path');
 
 main()
 	.then(() => {
@@ -25,18 +25,14 @@ async function main() {
 		throw new Error(validationError);
 	}
 
-	let setup;
-	if (CONFIG.image.toLowerCase().includes('postgres')) {
-		setup = PostgresqlSetup.setupPostgres;
-	} else if (CONFIG.image.toLowerCase().includes('mssql')) {
-		setup = SQLServerSetup.setupSQLServer;
-	}
+	const configurers = collectConfigurers();
+	const configurer = configurers.find(c => c.isMine(CONFIG.image));
 
-	if (!setup) {
+	if (configurer) {
+		await configurer.setup(CONFIG);
+	} else {
 		throw new Error(`unsupported image/DB '${CONFIG.image}'`);
 	}
-
-	await setup(CONFIG);
 }
 
 function validateSetup(setup) {
@@ -56,4 +52,24 @@ function validateSetup(setup) {
 		return `invalid 'database' parameter: [${setup.database}]`;
 	}
 	return null;
+}
+
+function collectConfigurers() {
+	const result = [];
+	const cDirs = fs.readdirSync('bin');
+	for (const cDir of cDirs) {
+		const cPath = path.join('bin', cDir);
+		if (!fs.statSync(cPath).isDirectory()) {
+			continue;
+		}
+		const cFiles = fs.readdirSync(cPath);
+		const cMain = cFiles.find(fileName => fileName.endsWith('-setup.js'));
+		if (cMain) {
+			const cCode = require('./' + path.join(cDir, cMain));
+			result.push(cCode);
+		} else {
+			console.warn(`configurer '${cDir}' is missing main setup file and will be skipped`);
+		}
+	}
+	return result;
 }
