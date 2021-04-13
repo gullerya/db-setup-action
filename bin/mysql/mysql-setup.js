@@ -71,7 +71,7 @@ async function healthCheck(cname, config) {
 			return status.trim() === '1'
 		},
 		{
-			ttl: 8000,
+			ttl: 16000,
 			interval: 2000
 		}
 	);
