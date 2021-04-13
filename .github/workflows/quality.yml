@@ -31,7 +31,7 @@ jobs:
         with:
           image: 'mysql:latest'
           port: 8080
-          username: root
+          username: mysqluser
           password: mysqlpass
           database: testdb
 
