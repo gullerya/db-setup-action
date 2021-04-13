@@ -54,7 +54,7 @@ async function healthCheck(cname, config) {
 			return status.trim() === 'running';
 		},
 		{
-			ttl: 4000
+			ttl: 24000
 		}
 	);
 	if (!isRunning) {
