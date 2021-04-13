@@ -30,7 +30,7 @@ jobs:
         uses: ./
         with:
           image: 'mysql:latest'
-          port: 8080
+          port: 3306
           username: mysqluser
           password: mysqlpass
           database: testdb
