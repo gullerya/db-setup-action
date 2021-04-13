@@ -64,7 +64,7 @@ async function healthCheck(cname, setup) {
 			// 	`${cname} mysql -u${setup.username} -p${setup.password} -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='${setup.database}'"`
 			// ]);
 			const status = await dockerExec([
-				`${cname} less /var/run/mysqld/mysqld.sock`
+				`${cname} cat /var/run/mysqld/mysqld.sock`
 			]);
 			return status.trim() === '1'
 		},
