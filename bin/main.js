@@ -26,7 +26,7 @@ async function main() {
 	}
 
 	const configurers = collectConfigurers();
-	const configurer = configurers.filter(c => c.isMine(CONFIG.image));
+	const configurer = configurers.find(c => c.isMine(CONFIG.image));
 
 	if (configurer) {
 		await configurer.setup(CONFIG);
@@ -60,12 +60,13 @@ function collectConfigurers() {
 	for (const cDir of cDirs) {
 		const cPath = path.join('bin', cDir);
 		if (!fs.statSync(cPath).isDirectory()) {
-			return;
+			continue;
 		}
 		const cFiles = fs.readdirSync(cPath);
-		const cMain = cFiles.filter(fileName => fileName.endsWith('-setup.js'));
+		const cMain = cFiles.find(fileName => fileName.endsWith('-setup.js'));
 		if (cMain) {
-			result.push(require(path.join(cDir, cMain)));
+			const cCode = require('./' + path.join(cDir, cMain));
+			result.push(cCode);
 		} else {
 			console.warn(`configurer '${cDir}' is missing main setup file and will be skipped`);
 		}
