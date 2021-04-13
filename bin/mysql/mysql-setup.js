@@ -22,30 +22,30 @@ function isMine(dockerImage) {
 	return dockerImage.toLowerCase().includes('mysql');
 }
 
-async function setup(setup) {
-	await pullDocker(setup.image);
+async function setup(config) {
+	await pullDocker(config.image);
 
 	const cname = 'db-setup-mysql-0';
 	await dockerRun(cname, [
 		'-e',
 		MYSQL_RANDOM_ROOT_PASS + '=Y',
 		'-e',
-		MYSQL_USER_KEY + '=' + setup.username,
+		MYSQL_USER_KEY + '=' + config.username,
 		'-e',
-		MYSQL_PASS_KEY + '=' + setup.password,
+		MYSQL_PASS_KEY + '=' + config.password,
 		'-e',
-		MYSQL_DB_KEY + '=' + setup.database,
+		MYSQL_DB_KEY + '=' + config.database,
 		'-p',
-		setup.port + ':' + MYSQL_NATIVE_PORT,
-		setup.image
+		config.port + ':' + MYSQL_NATIVE_PORT,
+		config.image
 	]);
 
 	await dumpPorts(cname);
 
-	await healthCheck(cname, setup);
+	await healthCheck(cname, config);
 }
 
-async function healthCheck(cname, setup) {
+async function healthCheck(cname, config) {
 	//	test the container is running
 	const isRunning = await retryUntil(
 		'Assert container is running',
@@ -63,10 +63,10 @@ async function healthCheck(cname, setup) {
 
 	//	test the DB is available
 	const isDbAvailable = await retryUntil(
-		`Assert DB '${setup.database}' available`,
+		`Assert DB '${config.database}' available`,
 		async () => {
 			const status = await dockerExec([
-				`${cname} mysql -u${setup.username} -p${setup.password} -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='${setup.database}'"`
+				`${cname} mysql -u${config.username} -p${config.password} -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='${config.database}'"`
 			]);
 			return status.trim() === '1'
 		},
@@ -75,6 +75,6 @@ async function healthCheck(cname, setup) {
 		}
 	);
 	if (!isDbAvailable) {
-		throw new Error(`DB '${setup.database}' is NOT available`);
+		throw new Error(`DB '${config.database}' is NOT available`);
 	}
 }

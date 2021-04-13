@@ -58,7 +58,11 @@ function collectConfigurers() {
 	const result = [];
 	const cDirs = fs.readdirSync('bin');
 	for (const cDir of cDirs) {
-		const cFiles = fs.readdirSync(path.join('bin', cDir));
+		const cPath = path.join('bin', cDir);
+		if (!fs.statSync(cPath).isDirectory()) {
+			return;
+		}
+		const cFiles = fs.readdirSync(cPath);
 		const cMain = cFiles.filter(fileName => fileName.endsWith('-setup.js'));
 		if (cMain) {
 			result.push(require(path.join(cDir, cMain)));

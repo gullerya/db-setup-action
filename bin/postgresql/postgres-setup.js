@@ -20,28 +20,28 @@ function isMine(dockerImage) {
 	return dockerImage.toLowerCase().includes('postgres');
 }
 
-async function setup(setup) {
-	await pullDocker(setup.image);
+async function setup(config) {
+	await pullDocker(config.image);
 
 	const cname = 'db-setup-postgresql-0';
 	await dockerRun(cname, [
 		'-e',
-		POSTGRES_USER_KEY + '=' + setup.username,
+		POSTGRES_USER_KEY + '=' + config.username,
 		'-e',
-		POSTGRES_PASSWORD_KEY + '=' + setup.password,
+		POSTGRES_PASSWORD_KEY + '=' + config.password,
 		'-e',
-		POSTGRES_DB_KEY + '=' + setup.database,
+		POSTGRES_DB_KEY + '=' + config.database,
 		'-p',
-		setup.port + ':' + POSTGRES_NATIVE_PORT,
-		setup.image
+		config.port + ':' + POSTGRES_NATIVE_PORT,
+		config.image
 	]);
 
 	await dumpPorts(cname);
 
-	await healthCheck(cname, setup);
+	await healthCheck(cname, config);
 }
 
-async function healthCheck(cname, setup) {
+async function healthCheck(cname, config) {
 	//	test the container is running
 	const isRunning = await retryUntil(
 		'Assert container is running',
@@ -59,9 +59,9 @@ async function healthCheck(cname, setup) {
 
 	//	test the DB is available
 	const isDbAvailable = await retryUntil(
-		`Assert DB '${setup.database}' available`,
+		`Assert DB '${config.database}' available`,
 		async () => {
-			const status = await dockerExec([`${cname} psql -U ${setup.username} -c "SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'" -t`]);
+			const status = await dockerExec([`${cname} psql -U ${config.username} -c "SELECT COUNT(*) FROM pg_database WHERE datname='${config.database}'" -t`]);
 			return status.trim() === '1'
 		},
 		{
@@ -69,6 +69,6 @@ async function healthCheck(cname, setup) {
 		}
 	);
 	if (!isDbAvailable) {
-		throw new Error(`DB '${setup.database}' is NOT available`);
+		throw new Error(`DB '${config.database}' is NOT available`);
 	}
 }
