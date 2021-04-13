@@ -61,7 +61,7 @@ async function healthCheck(cname, setup) {
 		`Assert DB '${setup.database}' available`,
 		async () => {
 			const status = await dockerExec([
-				`${cname} mysql --protocol=TCP -u${setup.username} -p${setup.password} -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='${setup.database}'"`
+				`${cname} mysql -u${setup.username} -p${setup.password} -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='${setup.database}'"`
 			]);
 			return status.trim() === '1'
 		},
