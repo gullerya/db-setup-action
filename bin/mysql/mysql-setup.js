@@ -54,7 +54,7 @@ async function healthCheck(cname, config) {
 			return status.trim() === 'running';
 		},
 		{
-			ttl: 24000
+			ttl: 4000
 		}
 	);
 	if (!isRunning) {
@@ -71,7 +71,8 @@ async function healthCheck(cname, config) {
 			return status.trim() === '1'
 		},
 		{
-			ttl: 4000
+			ttl: 24000,
+			interval: 1000
 		}
 	);
 	if (!isDbAvailable) {
