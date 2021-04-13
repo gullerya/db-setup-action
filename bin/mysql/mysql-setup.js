@@ -21,6 +21,8 @@ async function setupMySQL(setup) {
 	const cname = 'db-setup-mysql-0';
 	await dockerRun(cname, [
 		'-e',
+		'MYSQL_RANDOM_ROOT_PASSWORD=Y',
+		'-e',
 		MYSQL_USER_KEY + '=' + setup.username,
 		'-e',
 		MYSQL_PASS_KEY + '=' + setup.password,

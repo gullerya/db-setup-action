@@ -65,7 +65,7 @@ jobs:
       - name: Setup SQLServer
         uses: ./
         env:
-          ACCEPT_EULA: 'Y'
+          ACCEPT_EULA: Y
         with:
           image: 'mcr.microsoft.com/mssql/server:2019-latest'
           port: 1433
