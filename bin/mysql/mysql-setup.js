@@ -6,6 +6,8 @@ const {
 	dumpPorts,
 	retryUntil
 } = require('../utils');
+
+const MYSQL_RANDOM_ROOT_PASS = 'MYSQL_RANDOM_ROOT_PASSWORD';
 const MYSQL_USER_KEY = 'MYSQL_USER';
 const MYSQL_PASS_KEY = 'MYSQL_PASSWORD';
 const MYSQL_DB_KEY = 'MYSQL_DATABASE';
@@ -21,7 +23,7 @@ async function setupMySQL(setup) {
 	const cname = 'db-setup-mysql-0';
 	await dockerRun(cname, [
 		'-e',
-		'MYSQL_RANDOM_ROOT_PASSWORD=Y',
+		MYSQL_RANDOM_ROOT_PASS + '=Y',
 		'-e',
 		MYSQL_USER_KEY + '=' + setup.username,
 		'-e',
@@ -58,7 +60,9 @@ async function healthCheck(cname, setup) {
 	const isDbAvailable = await retryUntil(
 		`Assert DB '${setup.database}' available`,
 		async () => {
-			const status = await dockerExec([`${cname} psql -U ${setup.username} -c "SELECT COUNT(*) FROM pg_database WHERE datname='${setup.database}'" -t`]);
+			const status = await dockerExec([
+				`${cname} mysql -u${setup.username} -p${setup.password} -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='${setup.database}'"`
+			]);
 			return status.trim() === '1'
 		},
 		{

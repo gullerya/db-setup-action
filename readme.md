@@ -4,7 +4,8 @@
 
 `db-setup-action` automates install and run of the local DB (Docker based).
 
-Currently supported:
+Currently supported (in alphabetical order):
+- MySQL
 - PostgreSQL
 - SQLServer
 
@@ -20,9 +21,32 @@ Main purpose of this action is to provide an easy and maximum possibly uniform s
 | `port`     | port, that your application will be connecting to the DB with |
 | `username` | sets up DB's admin username |
 | `password` | sets up DB's admin password |
-| `database` | database name, that we'll create and your application will be using |
+| `database` | database name, that will be created for your application's use |
 
 > Attention: please review the per-DB sections below for any specifics or deviations of each.
+
+## MySQL
+
+### Usage example
+
+```yml
+name: Setup local MySQL
+uses: gullerya/db-setup-action@v1
+with:
+  image: 'mysql:latest'
+  port: 8080
+  username: mysqluser
+  password: mysqlpass
+  database: testdb
+```
+
+Full Docker images list [find here](https://hub.docker.com/_/mysql?tab=tags&page=1&ordering=last_updated).
+
+### Specific remarks
+
+MySQL has an OOTB provided superuser, `root`.
+I've deliberately decided to NOT allow use of that user, setting it's password to a random value.
+Please, let me know if this is limiting a usage of the MySQL in some essential way and should be reconsidered.
 
 ## PostgreSQL
 
