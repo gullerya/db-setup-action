@@ -1,5 +1,6 @@
 const PostgresqlSetup = require('./postgresql/postgres-setup');
 const SQLServerSetup = require('./sqlserver/sqlserver-setup');
+const MySQLSetup = require('./mysql/mysql-setup');
 
 main()
 	.then(() => {
@@ -26,7 +27,9 @@ async function main() {
 	}
 
 	let setup;
-	if (CONFIG.image.toLowerCase().includes('postgres')) {
+	if (CONFIG.image.toLowerCase().includes('mysql')) {
+		setup = MySQLSetup.setupMySQL;
+	} else if (CONFIG.image.toLowerCase().includes('postgres')) {
 		setup = PostgresqlSetup.setupPostgres;
 	} else if (CONFIG.image.toLowerCase().includes('mssql')) {
 		setup = SQLServerSetup.setupSQLServer;
