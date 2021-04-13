@@ -53,12 +53,12 @@ async function healthCheck(cname, setup) {
 		}
 	);
 	if (!isRunning) {
-		throw new Error(`postgres container '${cname}' failed to run`);
+		throw new Error(`DB container '${cname}' failed to run`);
 	}
 
 	//	test the DB is available
 	const isDBServerAvailable = await retryUntil(
-		'Assert SQLServer available',
+		'Assert DBServer available',
 		async () => {
 			let result = false;
 			const status = await dockerExec([`${cname} /opt/mssql-tools/bin/sqlcmd -U ${setup.username} -P ${setup.password} -Q "SELECT @@version"`]);

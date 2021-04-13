@@ -20,6 +20,24 @@ jobs:
       - name: Lint
         run: npm run lint
 
+  verify-postgresql-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PostgreSQL
+        uses: ./
+        with:
+          image: 'postgres:alpine'
+          port: 5432
+          username: postgres
+          password: postgres
+          database: testdb
+
+      - name: Test setup
+        run: echo "TBD"
+
   verify-sqlserver-setup:
     runs-on: ubuntu-latest
     steps:
@@ -40,19 +58,19 @@ jobs:
       - name: Test setup
         run: echo "TBD"
 
-  verify-postgresql-setup:
+  verify-mysql-setup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup PostgreSQL
+      - name: Setup MySQL
         uses: ./
         with:
-          image: 'postgres:alpine'
-          port: 5432
-          username: postgres
-          password: postgres
+          image: 'mysql:latest'
+          port: 8080
+          username: root
+          password: mysqlpass
           database: testdb
 
       - name: Test setup
