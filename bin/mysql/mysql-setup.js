@@ -66,13 +66,13 @@ async function healthCheck(cname, config) {
 		`Assert DB '${config.database}' available`,
 		async () => {
 			const status = await dockerExec([
-				`${cname} mysql -u${config.username} -p${config.password} -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='${config.database}'"`
+				`${cname} mysql -u${config.username} -p${config.password} -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='${config.database}'" -s -s`
 			]);
 			return status.trim() === '1'
 		},
 		{
-			ttl: 24000,
-			interval: 1000
+			ttl: 8000,
+			interval: 2000
 		}
 	);
 	if (!isDbAvailable) {
