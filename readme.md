@@ -49,6 +49,11 @@ with:
   database: testdb
 ```
 
+### Specific remarks
+
+MariaDB has an OOTB provided superuser, `root`.
+I've deliberately decided to NOT allow use of that user, setting it's password to a random value.
+
 ---
 
 ## MySQL
