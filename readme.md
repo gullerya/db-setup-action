@@ -2,30 +2,65 @@
 
 [![Quality](https://github.com/gullerya/db-setup-action/actions/workflows/quality.yml/badge.svg)](https://github.com/gullerya/db-setup-action/actions/workflows/quality.yml)
 
-`db-setup-action` automates install and run of the local DB (Docker based).
+`db-setup-action` automates setup of the chosen DB (Docker based, on host machine).
 
 Currently supported (in alphabetical order):
+- MariaDB
 - MySQL
 - PostgreSQL
 - SQLServer
 
-The installation uses official Docker images, see the links in per-DB section below.
+Installation uses official Docker images, see the links in per-DB sections below.
 
-Main purpose of this action is to provide an easy and maximum possibly uniform setup of DB server/s for tests automation.
+Purpose of this action is to provide an easy and maximum possibly uniform setup of the DB server/s for tests automation.
+
+> Attention: please review legal information links in per-DB sections below to ensure correct images usage.
 
 ## Inputs
 
 | Key        | Description |
 |------------|-------------|
 | `image`    | the exact Docker image per DB (see the lists below, under each supported DB section) |
-| `port`     | port, that your application will be connecting to the DB with |
+| `port`     | port __of your choice__, that your application will be connecting to the DB through |
 | `username` | sets up DB's admin username |
 | `password` | sets up DB's admin password |
 | `database` | database name, that will be created for your application's use |
 
 > Attention: please review the per-DB sections below for any specifics or deviations of each.
 
+---
+
+## MariaDB
+
+[Legal](https://mariadb.com/kb/en/mariadb-license/)
+
+[Images/tags list](https://hub.docker.com/_/mariadb?tab=tags&page=1&ordering=last_updated)
+
+### Usage example
+
+```yml
+name: Setup local MariaDB
+uses: gullerya/db-setup-action@v1
+with:
+  image: 'mariadb:latest'
+  port: 3306
+  username: mariadbuser
+  password: mariadbpass
+  database: testdb
+```
+
+### Specific remarks
+
+MariaDB has an OOTB provided superuser, `root`.
+I've deliberately decided to NOT allow use of that user, setting it's password to a random value.
+
+---
+
 ## MySQL
+
+[Legal](https://www.mysql.com/about/legal/)
+
+[Images/tags list](https://hub.docker.com/_/mysql?tab=tags&page=1&ordering=last_updated)
 
 ### Usage example
 
@@ -34,13 +69,11 @@ name: Setup local MySQL
 uses: gullerya/db-setup-action@v1
 with:
   image: 'mysql:latest'
-  port: 8080
+  port: 3306
   username: mysqluser
   password: mysqlpass
   database: testdb
 ```
-
-Full Docker images list [find here](https://hub.docker.com/_/mysql?tab=tags&page=1&ordering=last_updated).
 
 ### Specific remarks
 
@@ -48,7 +81,13 @@ MySQL has an OOTB provided superuser, `root`.
 I've deliberately decided to NOT allow use of that user, setting it's password to a random value.
 Please, let me know if this is limiting a usage of the MySQL in some essential way and should be reconsidered.
 
+---
+
 ## PostgreSQL
+
+[Legal](https://www.postgresql.org/about/licence/)
+
+[Images/tags list](https://hub.docker.com/_/postgres?tab=tags&page=1&ordering=last_updated)
 
 ### Usage example
 
@@ -63,9 +102,13 @@ with:
   database: testdb
 ```
 
-Full Docker images list [find here](https://hub.docker.com/_/postgres?tab=tags&page=1&ordering=last_updated).
+---
 
 ## SQLServer
+
+[Legal](https://hub.docker.com/_/microsoft-mssql-server) - see the License section at the bottom
+
+[Images/tags list](https://hub.docker.com/_/microsoft-mssql-server).
 
 ### Usage example
 
@@ -82,12 +125,11 @@ with:
   database: testdb
 ```
 
-Full Docker images list [find here](https://hub.docker.com/_/microsoft-mssql-server).
-
 ### Specific remarks
 
 In case of SQLServer please pay attention to the following:
 - you MUST set environment variable `ACCEPT_EULA=Y` to express your awareness of it
+- SQLServer is explicitly and deliberately set up as 'Developer' edition, see more in the Legal link above
 - the `username` MUST be `sa`
 - the `password` MUST meet strength requirements as per [this documentation (scroll to the `SA_PASSWORD` section)](https://hub.docker.com/_/microsoft-mssql-server)
 

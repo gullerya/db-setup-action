@@ -20,6 +20,24 @@ jobs:
       - name: Lint
         run: npm run lint
 
+  verify-mariadb-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup MariaDB
+        uses: ./
+        with:
+          image: 'mariadb:latest'
+          port: 3306
+          username: mariadbuser
+          password: mariadbpass
+          database: testdb
+
+      - name: Test setup
+        run: echo "TBD"
+
   verify-mysql-setup:
     runs-on: ubuntu-latest
     steps:
