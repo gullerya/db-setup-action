@@ -27,6 +27,8 @@ async function setup(config) {
 		'-e',
 		ACCEPT_EULA_KEY + '=' + process.env.ACCEPT_EULA,
 		'-e',
+		'MSSQL_PID=Developer',
+		'-e',
 		SA_PASSWORD_KEY + '=' + config.password,
 		'-p',
 		config.port + ':' + SQLSERVER_NATIVE_PORT,
