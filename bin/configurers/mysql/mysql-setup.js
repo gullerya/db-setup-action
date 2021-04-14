@@ -5,7 +5,7 @@ const {
 	dockerInspect,
 	dumpPorts,
 	retryUntil
-} = require('../utils');
+} = require('../../utils');
 
 const MYSQL_RANDOM_ROOT_PASS = 'MYSQL_RANDOM_ROOT_PASSWORD';
 const MYSQL_USER_KEY = 'MYSQL_USER';

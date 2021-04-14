@@ -5,7 +5,7 @@ const {
 	dockerInspect,
 	dumpPorts,
 	retryUntil
-} = require('../utils');
+} = require('../../utils');
 const ACCEPT_EULA_KEY = 'ACCEPT_EULA';
 const SA_PASSWORD_KEY = 'SA_PASSWORD';
 const SQLSERVER_NATIVE_PORT = '1433';

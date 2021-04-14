@@ -1,6 +1,6 @@
-const { ConfigurerBase } = require('../configurer-base.js');
-const { setup } = require('sqlserver-setup.js');
-const { test } = require('sqlserver-test.js');
+const ConfigurerBase = require('../configurer-base.js');
+const { setup } = require('./sqlserver-setup.js');
+const { test } = require('./sqlserver-test.js');
 
 class SQLServerConfigurer extends ConfigurerBase {
 	isMine(dbImage) {

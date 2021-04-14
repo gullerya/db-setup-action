@@ -1,6 +1,6 @@
-const { ConfigurerBase } = require('../configurer-base.js');
-const { setup } = require('mysql-setup.js');
-const { test } = require('mysql-test.js');
+const ConfigurerBase = require('../configurer-base.js');
+const { setup } = require('./mysql-setup.js');
+const { test } = require('./mysql-test.js');
 
 class MySQLConfigurer extends ConfigurerBase {
 	isMine(dbImage) {

@@ -5,7 +5,7 @@ const {
 	dockerInspect,
 	dumpPorts,
 	retryUntil
-} = require('../utils');
+} = require('../../utils');
 const POSTGRES_USER_KEY = 'POSTGRES_USER';
 const POSTGRES_PASSWORD_KEY = 'POSTGRES_PASSWORD';
 const POSTGRES_DB_KEY = 'POSTGRES_DB';

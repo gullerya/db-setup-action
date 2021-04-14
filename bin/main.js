@@ -25,7 +25,7 @@ async function main() {
 		throw new Error(validationError);
 	}
 
-	const configurers = collectConfigurers();
+	const configurers = loadConfigurers();
 	const configurer = configurers.find(c => c.isMine(CONFIG.image));
 
 	if (configurer) {
@@ -54,7 +54,7 @@ function validateSetup(setup) {
 	return null;
 }
 
-function collectConfigurers() {
+function loadConfigurers() {
 	const result = [];
 
 	const mainFileName = 'index.js';
@@ -64,13 +64,13 @@ function collectConfigurers() {
 		if (!fs.statSync(cPath).isDirectory()) {
 			continue;
 		}
-		const cFiles = fs.readdirSync(cPath);
-		const cMain = cFiles.find(fileName => fileName === mainFileName);
-		if (cMain) {
-			const c = require(path.join(cPath, cMain));
+
+		try {
+			const c = require('./' + path.join('configurers', cDir, mainFileName));
 			result.push(c);
-		} else {
-			console.warn(`configurer '${cDir}' is missing '${mainFileName}', skipping`);
+		} catch (e) {
+			console.error(e);
+			throw new Error(`failed to load configurer '${cDir}' due to previous error`);
 		}
 	}
 

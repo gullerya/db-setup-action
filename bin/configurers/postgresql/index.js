@@ -1,6 +1,6 @@
-const { ConfigurerBase } = require('../configurer-base.js');
-const { setup } = require('postgresql-setup.js');
-const { test } = require('postgresql-test.js');
+const ConfigurerBase = require('../configurer-base.js');
+const { setup } = require('./postgresql-setup.js');
+const { test } = require('./postgresql-test.js');
 
 class PostgreSQLConfigurer extends ConfigurerBase {
 	isMine(dbImage) {
