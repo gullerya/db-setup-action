@@ -67,7 +67,7 @@ function collectConfigurers() {
 		const cFiles = fs.readdirSync(cPath);
 		const cMain = cFiles.find(fileName => fileName === mainFileName);
 		if (cMain) {
-			const c = require('./' + path.join(cPath, cMain));
+			const c = require(path.join(cPath, cMain));
 			result.push(c);
 		} else {
 			console.warn(`configurer '${cDir}' is missing '${mainFileName}', skipping`);
