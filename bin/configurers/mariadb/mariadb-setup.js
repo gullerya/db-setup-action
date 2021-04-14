@@ -20,7 +20,7 @@ module.exports = {
 async function setup(config) {
 	await pullDocker(config.image);
 
-	const cname = 'db-setup-mysql-0';
+	const cname = 'db-setup-mariadb-0';
 	await dockerRun(cname, [
 		'-e',
 		MARIADB_RANDOM_ROOT_PASS + '=Y',
