@@ -11,13 +11,8 @@ const SA_PASSWORD_KEY = 'SA_PASSWORD';
 const SQLSERVER_NATIVE_PORT = '1433';
 
 module.exports = {
-	isMine,
 	setup
 };
-
-function isMine(dockerImage) {
-	return dockerImage.toLowerCase().includes('mssql');
-}
 
 async function setup(config) {
 	const ACCEPT_EULA = process.env[ACCEPT_EULA_KEY];
