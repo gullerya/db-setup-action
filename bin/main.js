@@ -12,7 +12,25 @@ main()
 	});
 
 async function main() {
-	const CONFIG = Object.freeze({
+	dumpSelfInfo();
+	const configuration = getValidatedConfig();
+	const configurer = getConfigurer(configuration.image);
+	await configurer.setup(configuration);
+}
+
+function dumpSelfInfo() {
+	try {
+		const packageInfoRaw = fs.readFileSync('package.json', { encoding: 'utf-8' });
+		const packageInfo = JSON.parse(packageInfoRaw);
+		console.info(`starting '${packageInfo.name}'`);
+		console.info(`\tversion: ${packageInfo.version}`);
+	} catch (e) {
+		console.warn(e);
+	}
+}
+
+function getValidatedConfig() {
+	const result = Object.freeze({
 		image: process.env.INPUT_IMAGE,
 		port: process.env.INPUT_PORT,
 		username: process.env.INPUT_USERNAME,
@@ -20,42 +38,32 @@ async function main() {
 		database: process.env.INPUT_DATABASE
 	});
 
-	const validationError = validateSetup(CONFIG);
-	if (validationError) {
-		throw new Error(validationError);
+	let error = null;
+	if (!result.image) {
+		error = `invalid 'image' parameter: ${result.image}`;
+	}
+	if (!result.port || isNaN(parseInt(result.port))) {
+		error = `invalid 'port' parameter: ${result.port}`;
+	}
+	if (!result.username) {
+		error = `invalid 'username' parameter: [${result.username}]`;
+	}
+	if (!result.password) {
+		error = `invalid 'password' parameter: [${result.password}]`;
+	}
+	if (!result.database) {
+		error = `invalid 'database' parameter: [${result.database}]`;
 	}
 
-	const configurers = loadConfigurers();
-	const configurer = configurers.find(c => c.isMine(CONFIG.image));
-
-	if (configurer) {
-		await configurer.setup(CONFIG);
-	} else {
-		throw new Error(`unsupported image/DB '${CONFIG.image}'`);
+	if (error) {
+		throw new Error(error);
 	}
+
+	return result;
 }
 
-function validateSetup(setup) {
-	if (!setup.image) {
-		return `invalid 'image' parameter: ${setup.image}`;
-	}
-	if (!setup.port || isNaN(parseInt(setup.port))) {
-		return `invalid 'port' parameter: ${setup.port}`;
-	}
-	if (!setup.username) {
-		return `invalid 'username' parameter: [${setup.username}]`;
-	}
-	if (!setup.password) {
-		return `invalid 'password' parameter: [${setup.password}]`;
-	}
-	if (!setup.database) {
-		return `invalid 'database' parameter: [${setup.database}]`;
-	}
-	return null;
-}
-
-function loadConfigurers() {
-	const result = [];
+function getConfigurer(dbImage) {
+	const result = null;
 
 	const mainFileName = 'index.js';
 	const configurersRoot = path.join('bin', 'configurers');
@@ -67,11 +75,18 @@ function loadConfigurers() {
 
 		try {
 			const c = require('./' + path.join('configurers', cDir, mainFileName));
-			result.push(c);
+			if (c.isMine(dbImage)) {
+				result = c;
+				break;
+			}
 		} catch (e) {
 			console.error(e);
-			throw new Error(`failed to load configurer '${cDir}' due to previous error`);
+			console.error(`failed to go through configurer '${cDir}' due to previous error, continue...`);
 		}
+	}
+
+	if (result === null) {
+		throw new Error(`unsupported image/DB '${dbImage}'`);
 	}
 
 	return result;
