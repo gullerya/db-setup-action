@@ -43,7 +43,7 @@ Purpose of this action:
 
 ```yml
 name: Setup local MariaDB
-uses: gullerya/db-setup-action@v1.2.0
+uses: gullerya/db-setup-action@v1.1.0
 with:
   image: 'mariadb:latest'
   port: 3306
@@ -69,7 +69,7 @@ I've deliberately decided to NOT allow use of that user, setting it's password t
 
 ```yml
 name: Setup local MySQL
-uses: gullerya/db-setup-action@v1.2.0
+uses: gullerya/db-setup-action@v1.1.0
 with:
   image: 'mysql:latest'
   port: 3306
@@ -96,7 +96,7 @@ Please, let me know if this is limiting a usage of the MySQL in some essential w
 
 ```yml
 name: Setup local PostgreSQL
-uses: gullerya/db-setup-action@v1.2.0
+uses: gullerya/db-setup-action@v1.1.0
 with:
   image: 'postgres:alpine'
   port: 5432
@@ -117,7 +117,7 @@ with:
 
 ```yml
 name: Setup SQLServer
-uses: gullerya/db-setup-action@v1.2.0
+uses: gullerya/db-setup-action@v1.1.0
 env:
   ACCEPT_EULA: 'Y'
 with:
