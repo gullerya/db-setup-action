@@ -54,8 +54,7 @@ function getConfigurer(dbImage) {
 	let result = null;
 
 	const mainFileName = 'index.js';
-	const configurersRoot = './' + path.join('bin', 'configurers');
-	console.info(__dirname);
+	const configurersRoot = path.join(__dirname, 'configurers');
 	for (const cDir of fs.readdirSync(configurersRoot)) {
 		const cPath = path.join(configurersRoot, cDir);
 		if (!fs.statSync(cPath).isDirectory()) {
