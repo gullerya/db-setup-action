@@ -12,7 +12,10 @@ Currently supported (in alphabetical order):
 
 Installation uses official Docker images, see the links in per-DB sections below.
 
-Purpose of this action is to provide an easy and maximum possibly uniform setup of the DB server/s for tests automation.
+Purpose of this action:
+- provide an easy and maximum possibly uniform setup of the DB server/s for tests automation
+- enable relevant extensibility for the outstanders
+- ensure the safest / best-practice defaults OOTB
 
 > Attention: please review legal information links in per-DB sections below to ensure correct images usage.
 
