@@ -12,21 +12,9 @@ main()
 	});
 
 async function main() {
-	dumpSelfInfo();
 	const configuration = getValidatedConfig();
 	const configurer = getConfigurer(configuration.image);
 	await configurer.setup(configuration);
-}
-
-function dumpSelfInfo() {
-	try {
-		const packageInfoRaw = fs.readFileSync('package.json', { encoding: 'utf-8' });
-		const packageInfo = JSON.parse(packageInfoRaw);
-		console.info(`starting '${packageInfo.name}':`);
-		console.info(`\tversion: ${packageInfo.version}`);
-	} catch (e) {
-		console.warn(e);
-	}
 }
 
 function getValidatedConfig() {
