@@ -22,7 +22,7 @@ function dumpSelfInfo() {
 	try {
 		const packageInfoRaw = fs.readFileSync('package.json', { encoding: 'utf-8' });
 		const packageInfo = JSON.parse(packageInfoRaw);
-		console.info(`starting '${packageInfo.name}'`);
+		console.info(`starting '${packageInfo.name}':`);
 		console.info(`\tversion: ${packageInfo.version}`);
 	} catch (e) {
 		console.warn(e);
@@ -63,7 +63,7 @@ function getValidatedConfig() {
 }
 
 function getConfigurer(dbImage) {
-	const result = null;
+	let result = null;
 
 	const mainFileName = 'index.js';
 	const configurersRoot = path.join('bin', 'configurers');
