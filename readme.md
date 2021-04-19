@@ -54,8 +54,9 @@ with:
 
 ### Specific remarks
 
-MariaDB has an OOTB provided superuser, `root`.
-I've deliberately decided to NOT allow use of that user, setting it's password to a random value.
+MariaDB provides a superuser OOTB, `root`.
+I've deliberately decided to NOT allow to use it, setting it's password to a random value.
+Please, let me know if this is limiting a usage of the MariaDB in some essential way and should be reconsidered.
 
 ---
 
@@ -80,8 +81,8 @@ with:
 
 ### Specific remarks
 
-MySQL has an OOTB provided superuser, `root`.
-I've deliberately decided to NOT allow use of that user, setting it's password to a random value.
+MySQL provides a superuser OOTB, `root`.
+I've deliberately decided to NOT allow to use it, setting it's password to a random value.
 Please, let me know if this is limiting a usage of the MySQL in some essential way and should be reconsidered.
 
 ---
